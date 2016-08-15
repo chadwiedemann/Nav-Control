@@ -1,0 +1,15 @@
+{
+companies:[
+        {
+           name:"apple",
+           products:[
+            {
+                     name:"iphone",
+                     url:"http://.."
+            }
+           ]
+    
+        }
+    
+    ]
+}

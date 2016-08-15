@@ -8,6 +8,7 @@
 
 #import "CompanyViewController.h"
 #import "ProductViewController.h"
+#import "NavControllerAppDelegate.h"
 
 @interface CompanyViewController ()
 
@@ -34,12 +35,12 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    
-    self.companyList = @[@"Apple mobile devices",@"Samsung mobile devices"];
+//    NavControllerAppDelegate *delegate= [UIApplication delegate];
+//    self.companyList= [delegate.DAO retrieveCompanies];
+    self.companyList = [NSMutableArray arrayWithObjects:@"Apple mobile devices",@"Samsung mobile devices",@"HTC mobile devices",@"BlackBerry mobile devices", nil];
     self.title = @"Mobile device makers";
-    
-    
+    self.companyLogos = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"apple"],[UIImage imageNamed:@"samsung"],[UIImage imageNamed:@"htc"],[UIImage imageNamed:@"blackberry"], nil];
+    self.tableView.editing = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,6 +76,7 @@
     // Configure the cell...
     
     cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
+    cell.imageView.image = [self.companyLogos objectAtIndex:[indexPath row]];
     
     return cell;
 }
@@ -102,12 +104,16 @@
 }
 */
 
-/*
-// Override to support rearranging the table view.
+
+//// Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+    NSString *object= [self.companyList objectAtIndex:fromIndexPath.row];
+    [self.companyList removeObject:object];
+    [self.companyList insertObject:object atIndex:toIndexPath.row];
+    /*[self.companyList exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];*/
+    
 }
-*/
 
 /*
 // Override to support conditional rearranging of the table view.
@@ -125,20 +131,25 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-
-    if (indexPath.row == 0){
-        self.productViewController.title = @"Apple mobile devices";
-    } else {
-        self.productViewController.title = @"Samsung mobile devices";
-    }
     
+    self.productViewController.title = [self.companyList objectAtIndex:indexPath.row];
+
     [self.navigationController
         pushViewController:self.productViewController
         animated:YES];
     
 
 }
- 
+
+- (void)tableView:(UITableView *)tableView
+commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.companyList removeObjectAtIndex:indexPath.row];
+    [self.companyLogos removeObjectAtIndex:indexPath.row];
+    
+    [tableView reloadData];
+}
 
 
 @end
