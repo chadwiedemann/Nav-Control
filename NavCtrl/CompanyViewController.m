@@ -41,6 +41,8 @@
     self.title = @"Mobile device makers";
     self.companyLogos = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"apple"],[UIImage imageNamed:@"samsung"],[UIImage imageNamed:@"htc"],[UIImage imageNamed:@"blackberry"], nil];
     self.tableView.editing = YES;
+    
+    NSString *test = [[NSString alloc]initWithString:@"testgit"];
 }
 
 - (void)didReceiveMemoryWarning
