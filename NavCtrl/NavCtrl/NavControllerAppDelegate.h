@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ProductsDAO.h"
+
 
 @interface NavControllerAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) UINavigationController *navigationController;
-@property (strong, nonatomic) ProductsDAO *DAO;
+
 
 @end

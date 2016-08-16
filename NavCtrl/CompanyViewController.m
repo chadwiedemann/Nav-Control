@@ -9,8 +9,14 @@
 #import "CompanyViewController.h"
 #import "ProductViewController.h"
 #import "NavControllerAppDelegate.h"
+#import "Company.h"
+#import "Product.h"
+#import "DAO.h"
 
 @interface CompanyViewController ()
+
+@property (nonatomic, retain) DAO *dataAccessObject;
+
 
 @end
 
@@ -29,20 +35,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.dataAccessObject = [DAO sharedInstanceOfDAO];
+  
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
- 
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
-//    NavControllerAppDelegate *delegate= [UIApplication delegate];
-//    self.companyList= [delegate.DAO retrieveCompanies];
-    self.companyList = [NSMutableArray arrayWithObjects:@"Apple mobile devices",@"Samsung mobile devices",@"HTC mobile devices",@"BlackBerry mobile devices", nil];
     self.title = @"Mobile device makers";
-    self.companyLogos = [NSMutableArray arrayWithObjects:[UIImage imageNamed:@"apple"],[UIImage imageNamed:@"samsung"],[UIImage imageNamed:@"htc"],[UIImage imageNamed:@"blackberry"], nil];
     self.tableView.editing = YES;
     
-    NSString *test = [[NSString alloc]initWithString:@"testgit"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,16 +58,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+
     // Return the number of rows in the section.
-    return [self.companyList count];
+    
+    return [self.dataAccessObject.companyList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -76,9 +80,9 @@
     }
     
     // Configure the cell...
-    
-    cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
-    cell.imageView.image = [self.companyLogos objectAtIndex:[indexPath row]];
+    Company *company = [self.dataAccessObject.companyList objectAtIndex:[indexPath row]];
+    cell.textLabel.text = company.name;
+    cell.imageView.image = [UIImage imageNamed:company.logoString];
     
     return cell;
 }
@@ -110,9 +114,9 @@
 //// Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
-    NSString *object= [self.companyList objectAtIndex:fromIndexPath.row];
-    [self.companyList removeObject:object];
-    [self.companyList insertObject:object atIndex:toIndexPath.row];
+    NSString *object= [self.dataAccessObject.companyList objectAtIndex:fromIndexPath.row];
+    [self.dataAccessObject.companyList removeObject:object];
+    [self.dataAccessObject.companyList insertObject:object atIndex:toIndexPath.row];
     /*[self.companyList exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];*/
     
 }
@@ -134,7 +138,8 @@
 {
 
     
-    self.productViewController.title = [self.companyList objectAtIndex:indexPath.row];
+    self.productViewController.title = [[self.dataAccessObject.companyList objectAtIndex:indexPath.row] name];
+    self.productViewController.company = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
 
     [self.navigationController
         pushViewController:self.productViewController
@@ -147,8 +152,7 @@
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.companyList removeObjectAtIndex:indexPath.row];
-    [self.companyLogos removeObjectAtIndex:indexPath.row];
+    [self.dataAccessObject.companyList removeObjectAtIndex:indexPath.row];
     
     [tableView reloadData];
 }
