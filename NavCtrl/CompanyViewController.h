@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "Company.h"
+#import "EditCompanyVC.h"
 @class ProductViewController;
 
 @interface CompanyViewController : UITableViewController
 
 
 @property (nonatomic, retain) IBOutlet  ProductViewController * productViewController;
-
+@property (nonatomic,retain) EditCompanyVC *editCompanyVC;
+@property (nonatomic, retain) NSData *JSONData;
+@property (nonatomic, retain) NSMutableArray *stockInfoArray;
 
 
 @end

@@ -12,10 +12,14 @@
 
 @interface DAO : NSObject
 
+
 @property (nonatomic, retain) NSMutableArray *companyList;
 
 
 + (DAO*)sharedInstanceOfDAO;
 -(void)addCompany: (Company *) company;
+-(void)deleteCompany: (Company *) company;
+-(void)addProductToCompany: (NSString *)company product:(Product*) product;
+-(void)removeProductFromCompany: (NSString *)company product:(Product*) product;
 
 @end

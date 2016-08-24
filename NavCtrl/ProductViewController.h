@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "WebSiteForProductVC.h"
 #import "Company.h"
+#import "ProductFormVC.h"
 
 
 @interface ProductViewController : UITableViewController
 @property (nonatomic, retain) WebSiteForProductVC* webSiteVC;
+@property (nonatomic, retain) ProductFormVC* companyForm;
 @property (nonatomic, retain) Company* company;
+@property (retain, nonatomic) ProductFormVC *productVC;
 
 @end
