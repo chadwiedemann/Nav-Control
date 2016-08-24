@@ -9,10 +9,18 @@
 #import <Foundation/Foundation.h>
 
 @interface Product : NSObject
+
 @property (nonatomic, retain) NSString *name;
-@property int companyId;
 @property (nonatomic, retain) NSString *urlString;
-@property (nonnull, retain) NSString *imageString;
+@property (nonatomic, retain) NSString *imageString;
+@property (nonatomic, retain) NSString *imageURL;
+@property NSInteger productIdentifier;
+
+
+
 -(instancetype)initWithProductName: (NSString*) name url: (NSString*) url imageString: (NSString*) imageString;
+-(instancetype)initWithProductName: (NSString*) name url: (NSString*) url imageURL: (NSString*) imageURL;
+
+
 
 @end

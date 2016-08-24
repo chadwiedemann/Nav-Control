@@ -17,7 +17,38 @@
     {
         self.name = name;
         self.logoString = logo;
+    }
+    return self;
+}
+
+-(instancetype)initWithCompanyName: (NSString*)name logoURL:(NSString *) logoURL ticker:(NSString *)ticker
+{
+    self = [super init];
+    if(self)
+    {
+        self.name = name;
         self.productsSold = [[NSMutableArray alloc]init];
+        self.ticker = ticker;
+        NSURL *url = [NSURL URLWithString:logoURL];
+        NSURLSessionDownloadTask *downloadLogoTask = [[NSURLSession sharedSession]downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error){
+            UIImage *downloadedLogo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
+            if(downloadedLogo != nil)
+            {
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsDirectory = [paths objectAtIndex:0];
+                NSString * filename = [NSString stringWithFormat:@"%@.jpg", name];
+                NSString *path = [documentsDirectory stringByAppendingPathComponent:filename];
+                self.logoURL = path;
+                NSData *data = UIImagePNGRepresentation(downloadedLogo);
+                [data writeToFile:path atomically:YES];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"newCompanyImageDownloaded"
+                 object:nil];
+            });
+        }];
+        [downloadLogoTask resume];
     }
     return self;
 }

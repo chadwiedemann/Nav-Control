@@ -12,12 +12,13 @@
 #import "Company.h"
 #import "Product.h"
 #import "DAO.h"
+#import "CompanyForm.h"
 
 @interface CompanyViewController ()
 
 @property (nonatomic, retain) DAO *dataAccessObject;
-
-
+@property (nonatomic, retain) CompanyForm *companyFormVC;
+@property (nonatomic, retain) UIStoryboard *mainStoryboard;
 @end
 
 @implementation CompanyViewController
@@ -27,31 +28,79 @@
     self = [super initWithStyle:style];
     
     if (self) {
-        // Custom initialization
+
     }
     return self;
+}
+
+-(void)reloadTable {
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
+    self.editCompanyVC = [[EditCompanyVC alloc]init];
     self.dataAccessObject = [DAO sharedInstanceOfDAO];
-  
+    self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.companyFormVC = (CompanyForm*)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"CompanyFormVC"];
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
     
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.title = @"Mobile device makers";
-    self.tableView.editing = YES;
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = addButton;
+    self.title = @"Watch List";
+    self.tableView.editing = NO;
+    self.tableView.allowsSelectionDuringEditing = YES;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadTable)
+                                                 name:@"newCompanyImageDownloaded"
+                                               object:nil];
+    [self loadCompaniesQuotes];
     
+}
+
+
+
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)loadCompaniesQuotes
+{
+    NSString *quoteQueryString=@"";
+    for (Company *company in self.dataAccessObject.companyList){
+        quoteQueryString=[NSString stringWithFormat:@"%@,%@",company.ticker,quoteQueryString];
+    }
+    quoteQueryString=[quoteQueryString substringToIndex:[quoteQueryString length]-1];
+    NSLog(@"%@",quoteQueryString);
+    NSString *queryURLString=[NSString stringWithFormat:@"https://www.google.com/finance/info?q=%@",quoteQueryString];
+    NSLog(@"%@",queryURLString);
+    NSURL *stockURL = [NSURL URLWithString:queryURLString];
+    NSURLSessionDataTask *downloadQuotes = [[NSURLSession sharedSession]dataTaskWithURL:stockURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSString *putInString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];//puts the JSON data into a string
+        NSString *newString = [putInString substringFromIndex:3];
+        self.JSONData = [newString dataUsingEncoding:NSUTF8StringEncoding];
+        self.stockInfoArray = [NSJSONSerialization JSONObjectWithData:self.JSONData options:NSJSONReadingMutableContainers error:nil]; //creates a dicionary with the JSON data
+        NSLog(@"%@",newString);
+        NSLog(@"%@",[[self.stockInfoArray objectAtIndex:0] valueForKey:@"l"]);
+    }];
+    [downloadQuotes resume];
+    
 }
 
 #pragma mark - Table view data source
@@ -73,17 +122,25 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    cell.showsReorderControl = YES;
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
     Company *company = [self.dataAccessObject.companyList objectAtIndex:[indexPath row]];
-    cell.textLabel.text = company.name;
-    cell.imageView.image = [UIImage imageNamed:company.logoString];
-    
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)",  company.name,company.ticker];
+    UIImage * myImage;
+    if (company.logoString) {
+        myImage = [UIImage imageNamed:company.logoString];
+    } else {
+        myImage = [UIImage imageWithContentsOfFile:company.logoURL];
+    }
+    cell.imageView.image = myImage;
+    cell.detailTextLabel.text = @"current stock price";
     return cell;
 }
 
@@ -137,13 +194,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
+    if(self.tableView.editing){
+        
+        self.editCompanyVC.editingCompany = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
+        [self.navigationController
+         pushViewController:self.editCompanyVC
+         animated:YES];
+    }else{
+        self.productViewController.company = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
+        [self.navigationController
+         pushViewController:self.productViewController
+         animated:YES];
+    }
     
-    self.productViewController.title = [[self.dataAccessObject.companyList objectAtIndex:indexPath.row] name];
-    self.productViewController.company = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
-
-    [self.navigationController
-        pushViewController:self.productViewController
-        animated:YES];
     
 
 }
@@ -157,5 +220,14 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [tableView reloadData];
 }
 
+- (void)addItem:sender {
+    
+    
+    [[self navigationController] presentViewController:self.companyFormVC animated:YES completion:nil];
+}
 
+//-(void)setEditing:(BOOL)editing animated:(BOOL)animated
+//{
+//    NSLog(@"editing began");
+//}
 @end

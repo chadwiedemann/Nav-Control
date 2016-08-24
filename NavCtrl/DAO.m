@@ -18,9 +18,16 @@
     if(self)
     {
         Company *apple = [[Company alloc]initWithCompanyName:@"Apple mobile devices" logo:@"apple"];
+        apple.ticker=@"AAPL";
         Company *samsung = [[Company alloc]initWithCompanyName:@"Samsung mobile devices" logo:@"samsung"];
+        samsung.ticker=@"SSNLF";
+
         Company *htc = [[Company alloc]initWithCompanyName:@"HTC mobile devices" logo:@"htc"];
+        htc.ticker=@"HTC";
+
         Company *blackberry = [[Company alloc]initWithCompanyName:@"BlackBerry Mobile devices" logo:@"blackberry"];
+        blackberry.ticker=@"BBRY";
+
         Product *iPhone = [[Product alloc]initWithProductName:@"iPhone" url:@"http://www.apple.com/iphone/" imageString:@"iPhone"];
         Product *iPad = [[Product alloc]initWithProductName:@"iPad" url:@"http://www.apple.com/ipad/" imageString:@"iPad"];
         Product *iPod = [[Product alloc]initWithProductName:@"iPod" url:@"http://www.apple.com/ipod/" imageString:@"iPod"];
@@ -51,7 +58,6 @@
         [self.companyList addObject:samsung];
         [self.companyList addObject:htc];
         [self.companyList addObject:blackberry];
-        
     }
     return self;
 }
@@ -79,5 +85,56 @@
     }
     [self.companyList addObject:company];
 }
+
+-(void)addProductToCompany: (NSString *)company product:(Product*) product
+{
+    
+    for(Company *company1 in self.companyList)
+    {
+        if ([company1.name isEqual: company]) {
+            [company1.productsSold addObject:product];
+        }
+    }
+}
+
+-(void)removeProductFromCompany: (NSString *)company product:(Product*) product
+{
+    for(Company *company1 in self.companyList)
+    {
+        if(company1.name==company){
+            [company1.productsSold removeObject:product];
+        }
+    }
+}
+
+-(void)editProductFromCompany: (NSString *)company product:(Product*) product
+{
+    for(Company *company1 in self.companyList)
+    {
+        if(company1.name==company){
+            for(NSUInteger i=0;i<[company1.productsSold count];i++)
+            {
+                if([[company1.productsSold objectAtIndex:i] name] == product.name){
+                    [company1.productsSold setObject:product atIndexedSubscript:i];
+                    break;
+                }
+            }
+        }
+    }
+}
+
+-(void)deleteCompany: (Company *) company
+{
+    for(NSInteger i=0;i<[self.companyList count];i++)
+    {
+        if(company.name == [[self.companyList objectAtIndex:i] name])
+        {
+            [self.companyList removeObjectAtIndex:i];
+            break;
+        }
+    }
+}
+
+
 
 @end

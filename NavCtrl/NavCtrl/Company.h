@@ -11,12 +11,17 @@
 
 @interface Company : NSObject
 
-@property int companyId;
+@property NSInteger companyIdentifier;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *logoString;
+@property (nonatomic, retain) NSString *logoURL;
+@property (nonatomic, retain) NSString *ticker;
+
 @property (nonatomic, retain) NSMutableArray *productsSold;
 
 -(instancetype)initWithCompanyName: (NSString*) name logo: (NSString*) logo;
+-(instancetype)initWithCompanyName: (NSString*)name logoURL:(NSString *)logoURL ticker: (NSString*)ticker;
+
 -(void)addProduct:(Product*) product;
 
 

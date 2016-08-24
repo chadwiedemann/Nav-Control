@@ -10,9 +10,12 @@
 #import "WebSiteForProductVC.h"
 #import "Product.h"
 #import "Company.h"
+#import "ProductFormVC.h"
+#import "DAO.h"
 
 @interface ProductViewController ()
-
+@property (nonatomic, retain) UIStoryboard *mainStoryboard;
+@property (nonatomic, retain) DAO *dataAccessObject;
 @end
 
 @implementation ProductViewController
@@ -29,18 +32,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadTable)
+                                                 name:@"newProductImageDownloaded"
+                                               object:nil];
+
     self.webSiteVC = [[WebSiteForProductVC alloc] init];
+   self.dataAccessObject = [DAO sharedInstanceOfDAO];
+    self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.productVC = (ProductFormVC*)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"ProductVC"];
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
     
+    NSArray *rightButtons = @[addButton,self.editButtonItem];
+    self.navigationItem.rightBarButtonItems = rightButtons;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
+    
+    self.title = self.company.name;
     
 
     [self.tableView reloadData];
@@ -76,10 +90,17 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    
-   
         cell.textLabel.text = [[self.company.productsSold objectAtIndex:[indexPath row]] name];
-        cell.imageView.image = [UIImage imageNamed:[[self.company.productsSold objectAtIndex:[indexPath row]] imageString]];
+    
+    UIImage * myImage;
+    if ([[self.company.productsSold objectAtIndex:[indexPath row]] imageString]) {
+        myImage = [UIImage imageNamed:[[self.company.productsSold objectAtIndex:[indexPath row]] imageString]];
+    } else {
+        myImage = [UIImage imageWithContentsOfFile:[[self.company.productsSold objectAtIndex:[indexPath row]] imageURL]];
+    }
+    cell.imageView.image = myImage;
+    
+//    cell.imageView.image = [UIImage imageNamed:[[self.company.productsSold objectAtIndex:[indexPath row]] imageURL]];
         return cell;
 
 }
@@ -112,8 +133,9 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
         Product *productToRemove = [self.company.productsSold objectAtIndex:fromIndexPath.row];
-        [self.company.productsSold removeObject:productToRemove];
-        [self.company.productsSold insertObject:productToRemove atIndex:toIndexPath.row];
+    [self.company.productsSold removeObject:productToRemove];
+    
+    [self.company.productsSold insertObject:productToRemove atIndex:toIndexPath.row];
 
     
 }
@@ -152,8 +174,8 @@
     
    
     self.webSiteVC.nsurl = [NSURL URLWithString:[[self.company.productsSold objectAtIndex:indexPath.row] urlString]];
-    
-
+    self.webSiteVC.productShown = [self.company.productsSold objectAtIndex:indexPath.row];
+    self.webSiteVC.companyFrom = self.company;
 
     
     [self.navigationController pushViewController:self.webSiteVC animated:YES];
@@ -167,13 +189,20 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     
         [self.company.productsSold removeObjectAtIndex:indexPath.row];
-        [self.company.productsSold removeObjectAtIndex:indexPath.row];
     
-
-
     
     [tableView deleteRowsAtIndexPaths:[NSMutableArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     
+}
+
+- (void)addItem:sender {
+    
+    self.productVC.curentCompany = self.company;
+    [[self navigationController] presentViewController:self.productVC animated:YES completion:nil];
+}
+
+-(void)reloadTable {
+    [self.tableView reloadData];
 }
 
 @end
