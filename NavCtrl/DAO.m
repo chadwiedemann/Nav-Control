@@ -135,6 +135,21 @@
     }
 }
 
-
+-(Company *)findCompanyByTicker: (NSString *)ticker
+{
+    for (Company *company in self.companyList){
+        if ([company.ticker isEqualToString:ticker]){
+            return company;
+        }
+    }
+    /*for(NSInteger i=0;i<[self.companyList count];i++)
+    {
+        if([[[self.companyList objectAtIndex:i] name] isEqualToString:name] )
+        {
+            return [self.companyList objectAtIndex:i];
+        }
+    }*/
+    return nil;
+}
 
 @end

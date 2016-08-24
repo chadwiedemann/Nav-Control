@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString *logoString;
 @property (nonatomic, retain) NSString *logoURL;
 @property (nonatomic, retain) NSString *ticker;
+@property float currentStockPrice;
 
 @property (nonatomic, retain) NSMutableArray *productsSold;
 

@@ -61,7 +61,7 @@
                                              selector:@selector(reloadTable)
                                                  name:@"newCompanyImageDownloaded"
                                                object:nil];
-    [self loadCompaniesQuotes];
+    
     
 }
 
@@ -72,6 +72,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.tableView reloadData];
+    [self loadCompaniesQuotes];
 }
 
 - (void)didReceiveMemoryWarning
@@ -98,6 +99,22 @@
         self.stockInfoArray = [NSJSONSerialization JSONObjectWithData:self.JSONData options:NSJSONReadingMutableContainers error:nil]; //creates a dicionary with the JSON data
         NSLog(@"%@",newString);
         NSLog(@"%@",[[self.stockInfoArray objectAtIndex:0] valueForKey:@"l"]);
+        
+        for(NSDictionary *companyDic in self.stockInfoArray){
+            NSString *companyTicker = [companyDic valueForKey:@"t"];
+            Company *company = [self.dataAccessObject findCompanyByTicker:companyTicker];
+            company.currentStockPrice = [companyDic[@"l_fix"] floatValue];
+        }
+        [self reloadTable];
+        /*for(NSInteger i = 0;i < self.stockInfoArray.count;i++){
+            
+            if([company.ticker isEqualToString:[NSString stringWithFormat:@"%@",[[self.stockInfoArray objectAtIndex:i] valueForKey:@"t"]]] ){
+                
+                cell.detailTextLabel.text = [[self.stockInfoArray objectAtIndex:i] valueForKey:@"l"];
+            }
+            
+        }*/
+        
     }];
     [downloadQuotes resume];
     
@@ -140,7 +157,13 @@
         myImage = [UIImage imageWithContentsOfFile:company.logoURL];
     }
     cell.imageView.image = myImage;
-    cell.detailTextLabel.text = @"current stock price";
+    cell.detailTextLabel.text = @"";
+    if(company.currentStockPrice >0.0){
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.2f",company.currentStockPrice];
+    }
+    
+    
+    
     return cell;
 }
 

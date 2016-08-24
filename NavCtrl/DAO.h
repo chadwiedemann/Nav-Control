@@ -21,5 +21,6 @@
 -(void)deleteCompany: (Company *) company;
 -(void)addProductToCompany: (NSString *)company product:(Product*) product;
 -(void)removeProductFromCompany: (NSString *)company product:(Product*) product;
+-(Company *)findCompanyByTicker: (NSString *)ticker;
 
 @end
