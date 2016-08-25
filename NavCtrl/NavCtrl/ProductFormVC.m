@@ -42,7 +42,7 @@
     
     self.dataAccessObject = [DAO sharedInstanceOfDAO];
     
-    Product *newProduct = [[Product alloc]initWithProductName:[self.productTextField text] url:[self.websiteTextField text] imageURL:[self.logoImageTextField text]];
+    Product *newProduct = [[Product alloc]initWithProductName:self.productTextField.text url:self.websiteTextField.text imageURL:self.logoImageTextField.text];
     
     [self.dataAccessObject addProductToCompany:self.curentCompany.name product:newProduct];
     [self dismissViewControllerAnimated:YES completion:nil];

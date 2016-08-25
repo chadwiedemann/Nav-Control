@@ -43,7 +43,7 @@
     
     self.dataAccessObject = [DAO sharedInstanceOfDAO];
     
-    Company *newCompany = [[Company alloc]initWithCompanyName:[self.CompanyTextField text] logoURL:[self.companyLogoTextField text] ticker:[self.companyTicker text]];
+    Company *newCompany = [[Company alloc]initWithCompanyName:[self.CompanyTextField text] logoURL:[self.companyLogoTextField text] ticker:self.companyTicker.text];
     
     [self.dataAccessObject addCompany:newCompany];
     [self dismissViewControllerAnimated:YES completion:nil];

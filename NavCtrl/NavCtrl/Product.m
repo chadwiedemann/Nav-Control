@@ -31,22 +31,21 @@
         self.urlString = url;
         NSURL *url1 = [NSURL URLWithString:imageURL];
         NSURLSessionDownloadTask *downloadLogoTask = [[NSURLSession sharedSession]downloadTaskWithURL:url1 completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error){
-            UIImage *downloadedLogo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
-            if(downloadedLogo != nil)
-            {
+            if (error) {
+                NSLog(@"%@", error.localizedDescription);
+            } else {
                 NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                 NSString *documentsDirectory = [paths objectAtIndex:0];
                 NSString *filename = [NSString stringWithFormat:@"%@.jpg", name];
                 NSString *path = [documentsDirectory stringByAppendingPathComponent:filename];
                 self.imageURL = path;
-                NSData *data = UIImagePNGRepresentation(downloadedLogo);
-                [data writeToFile:path atomically:YES];
+                [[NSFileManager defaultManager] moveItemAtPath:location toPath:path error:&error];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter]
+                     postNotificationName:@"newProductImageDownloaded"
+                     object:nil];
+                });
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"newProductImageDownloaded"
-                 object:nil];
-            });
         }];
         [downloadLogoTask resume];
         

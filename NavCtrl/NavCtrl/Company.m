@@ -28,7 +28,8 @@
     {
         self.name = name;
         self.productsSold = [[NSMutableArray alloc]init];
-        self.ticker = ticker;
+        NSString *uppercaseTicker = [ticker uppercaseString];
+        self.ticker = uppercaseTicker;
         NSURL *url = [NSURL URLWithString:logoURL];
         NSURLSessionDownloadTask *downloadLogoTask = [[NSURLSession sharedSession]downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error){
             UIImage *downloadedLogo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];

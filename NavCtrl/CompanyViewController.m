@@ -62,6 +62,13 @@
                                                  name:@"newCompanyImageDownloaded"
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadTable)
+                                                 name:@"newTickerDownloaded"
+                                               object:nil];
+
+    
+    
     
 }
 
@@ -105,15 +112,11 @@
             Company *company = [self.dataAccessObject findCompanyByTicker:companyTicker];
             company.currentStockPrice = [companyDic[@"l_fix"] floatValue];
         }
-        [self reloadTable];
-        /*for(NSInteger i = 0;i < self.stockInfoArray.count;i++){
-            
-            if([company.ticker isEqualToString:[NSString stringWithFormat:@"%@",[[self.stockInfoArray objectAtIndex:i] valueForKey:@"t"]]] ){
-                
-                cell.detailTextLabel.text = [[self.stockInfoArray objectAtIndex:i] valueForKey:@"l"];
-            }
-            
-        }*/
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"newTickerDownloaded"
+             object:nil];
+        });
         
     }];
     [downloadQuotes resume];
@@ -157,8 +160,10 @@
         myImage = [UIImage imageWithContentsOfFile:company.logoURL];
     }
     cell.imageView.image = myImage;
+    
     cell.detailTextLabel.text = @"";
-    if(company.currentStockPrice >0.0){
+    
+    if(company.currentStockPrice > 0.0){
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%.2f",company.currentStockPrice];
     }
     

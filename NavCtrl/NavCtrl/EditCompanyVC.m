@@ -26,7 +26,8 @@
 -(void)saveCompany:sender
 {
     if(![self.companyTicker.text isEqual:@""]){
-        self.editingCompany.ticker = self.companyTicker.text;
+        NSString *uppercaseTicker = [self.companyTicker.text uppercaseString];
+        self.editingCompany.ticker = uppercaseTicker;
     }
     if(![self.companyName.text isEqual:@""]){
         self.editingCompany.name = self.companyName.text;

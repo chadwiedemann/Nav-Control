@@ -142,13 +142,6 @@
             return company;
         }
     }
-    /*for(NSInteger i=0;i<[self.companyList count];i++)
-    {
-        if([[[self.companyList objectAtIndex:i] name] isEqualToString:name] )
-        {
-            return [self.companyList objectAtIndex:i];
-        }
-    }*/
     return nil;
 }
 
