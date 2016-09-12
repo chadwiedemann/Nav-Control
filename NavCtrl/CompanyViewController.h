@@ -9,15 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "Company.h"
 #import "EditCompanyVC.h"
-@class ProductViewController;
+@class ProductVController;
 
-@interface CompanyViewController : UITableViewController
+@interface CompanyViewController : UIViewController < UITableViewDataSource, UITableViewDelegate >
 
 
-@property (nonatomic, retain) IBOutlet  ProductViewController * productViewController;
+@property (nonatomic, retain) IBOutlet  ProductVController * productViewController;
 @property (nonatomic,retain) EditCompanyVC *editCompanyVC;
 @property (nonatomic, retain) NSData *JSONData;
 @property (nonatomic, retain) NSMutableArray *stockInfoArray;
-
-
+@property (retain, nonatomic) IBOutlet UITableView *companyTableView;
+- (IBAction)undoButton:(id)sender;
+- (IBAction)redoButton:(id)sender;
+@property (retain, nonatomic) IBOutlet UIImageView *noCompaniesImageView;
+- (IBAction)addCompanyButton:(id)sender;
+@property (retain, nonatomic) IBOutlet UIView *noCompaniesView;
+@property NSTimer *stockPriceReloadTimer;
 @end

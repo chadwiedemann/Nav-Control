@@ -8,7 +8,7 @@
 
 #import "EditProductVC.h"
 #import "DAO.h"
-#import "ProductViewController.h"
+#import "ProductVController.h"
 #import "WebSiteForProductVC.h"
 #define kOFFSET_FOR_KEYBOARD 80.0
 
@@ -28,13 +28,20 @@
     [self.view addGestureRecognizer:tap];
     UIBarButtonItem *save = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveItem:)];
     self.navigationItem.rightBarButtonItem = save;
-    self.navigationItem.title = [NSString stringWithFormat:@"%@",self.productEditing.name];
+    self.navigationItem.title = @"Edit Product";
     // Do any additional setup after loading the view from its nib.
-   
+    [self.navigationItem setHidesBackButton:YES];
+    
+    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(backToProduct:)];
+    [self.navigationItem setLeftBarButtonItem:leftBarButton];
+    [leftBarButton release];
+    
 }
 
 -(void)saveItem:sender
 {
+    DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
+    [dataAccessObject editProductInfo:self.nameTextField.text productURL:self.productURL.text productImageURL:self.productImageURL.text productEditing:self.productEditing companyFrom:self.companyFrom];
     
     
     if(![self.nameTextField.text isEqual:@""]){
@@ -66,15 +73,25 @@
         }];
         [downloadLogoTask resume];
     }
-    
+    if(self.productEditing.imageString)
+    {
+        self.productEditing.imageString = nil;
+    }
     
     self.webSiteVC.nsurl = [NSURL URLWithString:self.productEditing.urlString];
     self.webSiteVC.productShown = self.productEditing;
     [self.navigationController popViewControllerAnimated:true];
 }
 
+-(void)backToProduct: sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
+    
+    self.nameTextField.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.name];
     
     self.productURL.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.urlString];
     self.productImageURL.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.imageURL];
@@ -85,15 +102,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)dealloc {
     [_productURL release];
@@ -128,7 +136,7 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)sender
 {
-    if ([sender isEqual:self.productURL]||[sender isEqual:self.productImageURL])
+    if ([sender isEqual:self.productURL]||[sender isEqual:self.productImageURL]||[sender isEqual:self.nameTextField])
     {
         //move the main view, so that the keyboard does not hide it.
         if  (self.view.frame.origin.y >= 0)
@@ -194,14 +202,15 @@
 -(void)dismissKeyboard {
     [self.productImageURL resignFirstResponder];
     [self.productURL resignFirstResponder];
+    [self.nameTextField resignFirstResponder];
     
 }
 
 - (IBAction)deleteProduct:(id)sender {
     
     DAO *dataAccessObjest = [DAO sharedInstanceOfDAO];
-    [dataAccessObjest removeProductFromCompany:self.companyFrom.name product:self.productEditing];
-    ProductViewController *PVC = [[ProductViewController alloc]init];
+    [dataAccessObjest removeProductFromCompany:self.companyFrom product:self.productEditing];
+    ProductVController *PVC = [[ProductVController alloc]init];
     PVC.company = self.companyFrom;
     [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
 }

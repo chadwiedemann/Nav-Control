@@ -12,10 +12,13 @@
 #import "ProductFormVC.h"
 
 
-@interface ProductViewController : UITableViewController
+@interface ProductViewController : UIViewController <UITableViewDataSource, UITableViewDelegate >
+
 @property (nonatomic, retain) WebSiteForProductVC* webSiteVC;
 @property (nonatomic, retain) ProductFormVC* companyForm;
 @property (nonatomic, retain) Company* company;
 @property (retain, nonatomic) ProductFormVC *productVC;
+@property (retain, nonatomic) IBOutlet UITableView *productTableView;
+
 
 @end

@@ -23,31 +23,38 @@
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
+    
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+     
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadTable)
                                                  name:@"newProductImageDownloaded"
                                                object:nil];
 
     self.webSiteVC = [[WebSiteForProductVC alloc] init];
-   self.dataAccessObject = [DAO sharedInstanceOfDAO];
+    self.dataAccessObject = [DAO sharedInstanceOfDAO];
     self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     self.productVC = (ProductFormVC*)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"ProductVC"];
     // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
+//     self.productTableView.clearsSelectionOnViewWillAppear = NO;
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
     
-    NSArray *rightButtons = @[addButton,self.editButtonItem];
-    self.navigationItem.rightBarButtonItems = rightButtons;
+    self.navigationItem.rightBarButtonItem = addButton;
+    self.productTableView.delegate = self;
+    self.productTableView.dataSource = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -57,7 +64,7 @@
     self.title = self.company.name;
     
 
-    [self.tableView reloadData];
+    [self.productTableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -188,9 +195,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     
-        [self.company.productsSold removeObjectAtIndex:indexPath.row];
+    DAO *dataAccessOject = [DAO sharedInstanceOfDAO];
     
-    
+    [dataAccessOject removeProductFromCompany:self.company product:[self.company.productsSold objectAtIndex:indexPath.row]];
+//    [self.company.productsSold removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSMutableArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     
 }
@@ -202,7 +210,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 -(void)reloadTable {
-    [self.tableView reloadData];
+    [self.productTableView reloadData];
 }
 
+- (void)dealloc {
+    [_productTableView release];
+    [super dealloc];
+}
 @end

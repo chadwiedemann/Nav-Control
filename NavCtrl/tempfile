@@ -1,0 +1,144 @@
+-(id)init
+{
+self = [super init];
+if(self)
+{
+
+
+
+//fetch companies
+NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+NSSortDescriptor *sortByCreationDate = [[NSSortDescriptor alloc]
+initWithKey:@"companyID" ascending:YES];
+[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortByCreationDate]];
+NSEntityDescription *entity = [NSEntityDescription entityForName:@"CompanyMO" inManagedObjectContext:[self managedObjectContext]];
+[fetchRequest setEntity:entity];
+NSError *error = nil;
+NSArray *fetchedCompanies = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+
+
+if (fetchedCompanies == nil) {
+NSLog(@"%@",error.localizedDescription);
+}
+self.companyMO = [fetchedCompanies mutableCopy];
+
+
+//fetch products
+NSFetchRequest *fetchedProducts = [[NSFetchRequest alloc] init];
+NSSortDescriptor *sortByCreationDateProducts = [[NSSortDescriptor alloc]
+initWithKey:@"productID" ascending:YES];
+[fetchedProducts setSortDescriptors:[NSArray arrayWithObject:sortByCreationDateProducts]];
+NSEntityDescription *entityProducts = [NSEntityDescription entityForName:@"ProductMO" inManagedObjectContext:[self managedObjectContext]];
+[fetchedProducts setEntity:entityProducts];
+NSError *errorProducts = nil;
+NSArray *fetchedObjectsProducts = [[self managedObjectContext] executeFetchRequest:fetchedProducts error:&error];
+
+[sortByCreationDate release];
+[fetchRequest release];
+
+[sortByCreationDateProducts release];
+[fetchedProducts release];
+
+if (fetchedObjectsProducts == nil) {
+NSLog(@"%@",errorProducts.localizedDescription);
+}
+
+self.productMO = [fetchedObjectsProducts mutableCopy];
+self.managedObjectContext.undoManager = [[NSUndoManager alloc]init];
+
+
+self.companyList = [[NSMutableArray alloc]init];
+
+
+NSLog(@"we have data");
+for(CompanyMO *comp in self.companyMO)
+{
+[self createCompanyFromMO:comp products:self.productMO];
+}
+
+
+return self;
+
+
+
+
+
+
+
+
+
+//creating hardcoded data
+if(fetchedCompanies.count == 0){
+NSLog(@"empty database");
+
+Company *apple = [[Company alloc]initWithCompanyName:@"Apple Inc." logo:@"apple"];
+apple.ticker=@"AAPL";
+
+CompanyMO *appleMO = [NSEntityDescription insertNewObjectForEntityForName:@"CompanyMO" inManagedObjectContext:[self managedObjectContext]];
+appleMO.name = apple.name;
+appleMO.logoString = apple.logoString;
+appleMO.ticker = apple.ticker;
+appleMO.companyID = [NSNumber numberWithInteger:apple.companyID];
+
+Company *google = [[Company alloc]initWithCompanyName:@"Google" logo:@"google"];
+google.ticker = @"GOOG";
+
+CompanyMO *googleMO = [NSEntityDescription insertNewObjectForEntityForName:@"CompanyMO" inManagedObjectContext:[self managedObjectContext]];
+googleMO.name = google.name;
+googleMO.logoString = google.logoString;
+googleMO.ticker = google.ticker;
+googleMO.companyID = [NSNumber numberWithInt:google.companyID];
+
+Company *twitter = [[Company alloc]initWithCompanyName:@"Twitter" logo:@"twitter"];
+twitter.ticker = @"TWTR";
+
+CompanyMO *twitterMO = [NSEntityDescription insertNewObjectForEntityForName:@"CompanyMO" inManagedObjectContext:[self managedObjectContext]];
+twitterMO.name = twitter.name;
+twitterMO.logoString = twitter.logoString;
+twitterMO.ticker = twitter.ticker;
+twitterMO.companyID = [NSNumber numberWithInteger:twitter.companyID];
+
+Company *tesla = [[Company alloc]initWithCompanyName:@"Tesla" logo:@"tesla"];
+tesla.ticker = @"TSLA";
+
+CompanyMO *teslaMO = [NSEntityDescription insertNewObjectForEntityForName:@"CompanyMO" inManagedObjectContext:[self managedObjectContext]];
+teslaMO.name = tesla.name;
+teslaMO.logoString = tesla.logoString;
+teslaMO.ticker = tesla.ticker;
+teslaMO.companyID = [NSNumber numberWithInteger:tesla.companyID];
+
+Product *macBook = [[Product alloc]initWithProductName:@"MacBook - Space Gray" url:@"http://www.apple.com/macbook-pro/" imageString:@"macbook" company:apple.companyID];
+
+ProductMO *macBookMO = [NSEntityDescription insertNewObjectForEntityForName:@"ProductMO" inManagedObjectContext:[self managedObjectContext]];
+macBookMO.name = macBook.name;
+macBookMO.urlString = macBook.urlString;
+macBookMO.imageString = macBook.imageString;
+macBookMO.companyID = [NSNumber numberWithInteger:macBook.companyID];
+macBookMO.company = appleMO;
+macBookMO.productID = [NSNumber numberWithInteger:macBook.productID];
+[self.productMO addObject:macBookMO];
+[apple addProduct:macBook];
+
+[self.companyList addObject:apple];
+[self.companyMO addObject:appleMO];
+[self.companyList addObject:tesla];
+[self.companyList addObject:twitter];
+[self.companyList addObject:google];
+[self.companyMO addObject:teslaMO];
+[self.companyMO addObject:googleMO];
+[self.companyMO addObject:twitterMO];
+[self saveContext];
+
+}else
+{
+NSLog(@"we have data");
+for(CompanyMO *comp in self.companyMO)
+{
+[self createCompanyFromMO:comp products:self.productMO];
+}
+}
+}
+
+
+return self;
+}

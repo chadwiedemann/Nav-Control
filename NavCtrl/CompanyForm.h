@@ -13,5 +13,8 @@
 @property (retain, nonatomic) IBOutlet UITextField *CompanyTextField;
 @property (retain, nonatomic) IBOutlet UITextField *companyLogoTextField;
 @property (retain, nonatomic) IBOutlet UITextField *companyTicker;
+@property int companyID;
+- (IBAction)cancelButton:(id)sender;
+
 
 @end

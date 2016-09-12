@@ -7,6 +7,7 @@
 //
 //example url for logo http://upload.wikimedia.org/wikipedia/commons/7/7f/Williams_River-27527.jpg
 //  http://channahon.org/wp-content/uploads/2012/10/exxon-mobil_Logo.jpg
+//  https://upload.wikimedia.org/wikipedia/commons/8/82/Facebook_icon.jpg
 
 
 #import "CompanyForm.h"
@@ -29,6 +30,7 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:127.0/255.0 green:180.0/255.0 blue:57.0/255.0 alpha:0.5];
     // Do any additional setup after loading the view.
 }
 
@@ -153,4 +155,8 @@
     [self.companyTicker resignFirstResponder];
 }
 
+- (IBAction)cancelButton:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
 @end

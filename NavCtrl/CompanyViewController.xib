@@ -3,32 +3,120 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CompanyViewController">
             <connections>
-                <outlet property="productViewController" destination="Xwu-Pd-0Xh" id="zKe-GD-Zeh"/>
-                <outlet property="view" destination="8" id="11"/>
+                <outlet property="companyTableView" destination="4fz-wO-HgY" id="UKa-sl-rSv"/>
+                <outlet property="noCompaniesImageView" destination="mlg-mb-kvy" id="wjZ-ui-gGQ"/>
+                <outlet property="noCompaniesView" destination="sSd-rA-Q3V" id="uU8-Gj-EsO"/>
+                <outlet property="view" destination="lcj-IH-UxP" id="OI1-OM-Msj"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" bouncesZoom="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="8">
-            <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-            <nil key="simulatedStatusBarMetrics"/>
-            <connections>
-                <outlet property="dataSource" destination="-1" id="9"/>
-                <outlet property="delegate" destination="-1" id="10"/>
-            </connections>
-        </tableView>
-        <viewController id="Xwu-Pd-0Xh" userLabel="ProductViewController" customClass="ProductViewController">
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
-        </viewController>
-        <view contentMode="scaleToFill" id="bKn-UP-3Lv">
-            <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+        <view contentMode="scaleToFill" id="lcj-IH-UxP">
+            <rect key="frame" x="0.0" y="0.0" width="363" height="583"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4fz-wO-HgY">
+                    <rect key="frame" x="0.0" y="0.0" width="363" height="524.5"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="uxN-9W-Ann"/>
+                        <outlet property="delegate" destination="-1" id="P3E-Zb-6Gw"/>
+                    </connections>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="65T-Qc-dwR">
+                    <rect key="frame" x="0.0" y="524" width="181.5" height="58"/>
+                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" title="Undo">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="undoButton:" destination="-1" eventType="touchUpInside" id="Duf-dC-3PZ"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zd2-jg-qTB">
+                    <rect key="frame" x="181" y="524" width="181.5" height="58.5"/>
+                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" title="Redo">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="redoButton:" destination="-1" eventType="touchUpInside" id="EhK-D0-xHR"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSd-rA-Q3V">
+                    <rect key="frame" x="0.0" y="0.0" width="363" height="583"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mlg-mb-kvy">
+                            <rect key="frame" x="91" y="103" width="180" height="180"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="180" id="crO-9r-F4Y"/>
+                                <constraint firstAttribute="height" constant="180" id="xKE-rn-kdq"/>
+                            </constraints>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Du0-jg-bPl">
+                            <rect key="frame" x="91" y="403" width="181.5" height="34"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <state key="normal" title="+ Add Company"/>
+                            <connections>
+                                <action selector="addCompanyButton:" destination="-1" eventType="touchUpInside" id="sus-0x-nqg"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hri-jl-yeS">
+                            <rect key="frame" x="45" y="319" width="272" height="42"/>
+                            <attributedString key="attributedText">
+                                <fragment content="You Currently don't have any companies added">
+                                    <attributes>
+                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="18" name="HelveticaNeue"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="583" id="7T9-7K-fpf"/>
+                        <constraint firstItem="Du0-jg-bPl" firstAttribute="top" secondItem="hri-jl-yeS" secondAttribute="bottom" constant="42" id="7Uf-SW-QOL"/>
+                        <constraint firstItem="hri-jl-yeS" firstAttribute="width" secondItem="sSd-rA-Q3V" secondAttribute="width" multiplier="0.75" id="DF8-gq-Llu"/>
+                        <constraint firstItem="Du0-jg-bPl" firstAttribute="centerX" secondItem="sSd-rA-Q3V" secondAttribute="centerX" id="Pzm-jS-8bz"/>
+                        <constraint firstAttribute="width" constant="363" id="S7u-UJ-aVg"/>
+                        <constraint firstItem="mlg-mb-kvy" firstAttribute="top" secondItem="sSd-rA-Q3V" secondAttribute="top" constant="103" id="TjS-0g-h2I"/>
+                        <constraint firstItem="Du0-jg-bPl" firstAttribute="width" secondItem="sSd-rA-Q3V" secondAttribute="width" multiplier="0.5" id="X74-iJ-W0M"/>
+                        <constraint firstItem="mlg-mb-kvy" firstAttribute="centerX" secondItem="sSd-rA-Q3V" secondAttribute="centerX" id="frL-fh-m40"/>
+                        <constraint firstItem="hri-jl-yeS" firstAttribute="top" secondItem="mlg-mb-kvy" secondAttribute="bottom" constant="36" id="h4e-6c-b0v"/>
+                        <constraint firstItem="hri-jl-yeS" firstAttribute="centerX" secondItem="sSd-rA-Q3V" secondAttribute="centerX" id="qbo-Kd-084"/>
+                    </constraints>
+                </view>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="zd2-jg-qTB" firstAttribute="top" secondItem="4fz-wO-HgY" secondAttribute="bottom" id="29T-96-poz"/>
+                <constraint firstAttribute="trailing" secondItem="sSd-rA-Q3V" secondAttribute="trailing" id="2Vb-Je-20b"/>
+                <constraint firstAttribute="trailing" secondItem="zd2-jg-qTB" secondAttribute="trailing" id="4sn-cF-Rz6"/>
+                <constraint firstItem="65T-Qc-dwR" firstAttribute="leading" secondItem="lcj-IH-UxP" secondAttribute="leading" id="5wW-cI-Dn1"/>
+                <constraint firstItem="65T-Qc-dwR" firstAttribute="top" secondItem="4fz-wO-HgY" secondAttribute="bottom" id="Dhz-S0-T8p"/>
+                <constraint firstItem="4fz-wO-HgY" firstAttribute="height" secondItem="lcj-IH-UxP" secondAttribute="height" multiplier="0.9" id="LZj-jt-bPF"/>
+                <constraint firstItem="sSd-rA-Q3V" firstAttribute="top" secondItem="lcj-IH-UxP" secondAttribute="top" id="O1T-u1-PMA"/>
+                <constraint firstAttribute="bottom" secondItem="65T-Qc-dwR" secondAttribute="bottom" id="V1z-09-9DJ"/>
+                <constraint firstItem="zd2-jg-qTB" firstAttribute="leading" secondItem="65T-Qc-dwR" secondAttribute="trailing" id="WSY-xb-oeC"/>
+                <constraint firstItem="zd2-jg-qTB" firstAttribute="width" secondItem="65T-Qc-dwR" secondAttribute="width" id="YM2-O7-4AH"/>
+                <constraint firstItem="zd2-jg-qTB" firstAttribute="leading" secondItem="65T-Qc-dwR" secondAttribute="trailing" id="ZU7-sc-Hxb"/>
+                <constraint firstAttribute="bottom" secondItem="sSd-rA-Q3V" secondAttribute="bottom" id="eWS-yU-mJW"/>
+                <constraint firstItem="sSd-rA-Q3V" firstAttribute="leading" secondItem="lcj-IH-UxP" secondAttribute="leading" id="iql-0l-GzI"/>
+                <constraint firstAttribute="bottom" secondItem="zd2-jg-qTB" secondAttribute="bottom" id="l0h-S7-UM2"/>
+                <constraint firstItem="zd2-jg-qTB" firstAttribute="width" secondItem="lcj-IH-UxP" secondAttribute="width" multiplier="0.5" id="lsd-gp-PBH"/>
+                <constraint firstItem="4fz-wO-HgY" firstAttribute="leading" secondItem="lcj-IH-UxP" secondAttribute="leading" id="o5t-1t-gk3"/>
+                <constraint firstAttribute="trailing" secondItem="4fz-wO-HgY" secondAttribute="trailing" id="ybw-kA-zXz"/>
+                <constraint firstItem="4fz-wO-HgY" firstAttribute="top" secondItem="lcj-IH-UxP" secondAttribute="top" id="zTn-zg-LZq"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-1533.5" y="-442.5"/>
         </view>
     </objects>
 </document>

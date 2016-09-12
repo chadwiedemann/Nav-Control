@@ -6,23 +6,25 @@
 //  Copyright © 2016 Aditya Narayan. All rights reserved.
 //
 
-#import "ProductFormVC.h"
+#import "AddProductFormVC.h"
 #import "DAO.h"
 #import "Product.h"
 #define kOFFSET_FOR_KEYBOARD 80.0
 
-@interface ProductFormVC ()
+@interface AddProductFormVC ()
 @property (nonatomic, retain) DAO *dataAccessObject;
 @end
 
-@implementation ProductFormVC
+@implementation AddProductFormVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+   
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
+    self.backToProductImage.leftBarButtonItem.image = [UIImage imageNamed:@"arrow"];
     // Do any additional setup after loading the view.
 }
 
@@ -36,15 +38,16 @@
     [_productTextField release];
     [_logoImageTextField release];
     [_websiteTextField release];
+    [_backToProductImage release];
     [super dealloc];
 }
 - (IBAction)saveProductButton:(UIBarButtonItem *)sender {
     
     self.dataAccessObject = [DAO sharedInstanceOfDAO];
     
-    Product *newProduct = [[Product alloc]initWithProductName:self.productTextField.text url:self.websiteTextField.text imageURL:self.logoImageTextField.text];
+    Product *newProduct = [[Product alloc]initWithProductName:self.productTextField.text url:self.websiteTextField.text imageURL:self.logoImageTextField.text company:self.curentCompany.companyID];
     
-    [self.dataAccessObject addProductToCompany:self.curentCompany.name product:newProduct];
+    [self.dataAccessObject addProductToCompany:self.curentCompany product:newProduct];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -142,4 +145,9 @@
     [self.websiteTextField resignFirstResponder];
 }
 
+- (IBAction)backToProductButton:(id)sender {
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
 @end

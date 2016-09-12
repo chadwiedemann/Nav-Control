@@ -17,6 +17,20 @@
     {
         self.name = name;
         self.logoString = logo;
+        
+        
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if(![defaults integerForKey:@"companyID"]){
+            [defaults setInteger:1 forKey:@"companyID"];
+            self.companyID = 1;
+        }else{
+            self.companyID = [defaults integerForKey:@"companyID"]+1;
+            [defaults setInteger:self.companyID forKey:@"companyID"];
+        }
+        
+        
+        
     }
     return self;
 }
@@ -26,10 +40,19 @@
     self = [super init];
     if(self)
     {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        if(![defaults integerForKey:@"companyID"]){
+            [defaults setInteger:1 forKey:@"companyID"];
+            self.companyID = 1;
+        }else{
+            self.companyID = [defaults integerForKey:@"companyID"]+1;
+            [defaults setInteger:self.companyID forKey:@"companyID"];
+        }
         self.name = name;
-        self.productsSold = [[NSMutableArray alloc]init];
+//        self.productsSold = [[NSMutableArray alloc]init];
         NSString *uppercaseTicker = [ticker uppercaseString];
         self.ticker = uppercaseTicker;
+        self.logoURL = logoURL;
         NSURL *url = [NSURL URLWithString:logoURL];
         NSURLSessionDownloadTask *downloadLogoTask = [[NSURLSession sharedSession]downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error){
             UIImage *downloadedLogo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
@@ -55,11 +78,12 @@
 }
 
 
--(void)addProduct: (Product*) product
-{
-    if(self.productsSold==nil){
-        self.productsSold = [[NSMutableArray alloc]init];
-    }
-    [self.productsSold addObject:product];
-}
+//-(void)addProduct: (Product*) product
+//{
+//    if(self.productsSold==nil){
+//        self.productsSold = [[NSMutableArray alloc]init];
+//    }
+//    [self.productsSold addObject:product];
+//    [self.productsSold autorelease];
+//}
 @end

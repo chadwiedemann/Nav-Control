@@ -9,12 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "Company.h"
 
-@interface ProductFormVC : UIViewController
+@interface AddProductFormVC : UIViewController
 @property (retain, nonatomic) IBOutlet UITextField *productTextField;
 @property (retain, nonatomic) IBOutlet UITextField *logoImageTextField;
 @property (retain, nonatomic) IBOutlet UITextField *websiteTextField;
 - (IBAction)saveProductButton:(UIBarButtonItem *)sender;
 @property (nonatomic, retain) Company *curentCompany;
+- (IBAction)backToProductButton:(id)sender;
+@property (retain, nonatomic) IBOutlet UINavigationItem *backToProductImage;
 
 
 @end

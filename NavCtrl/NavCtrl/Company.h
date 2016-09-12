@@ -11,17 +11,21 @@
 
 @interface Company : NSObject
 
-@property NSInteger companyIdentifier;
+
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *logoString;
 @property (nonatomic, retain) NSString *logoURL;
 @property (nonatomic, retain) NSString *ticker;
 @property float currentStockPrice;
-
 @property (nonatomic, retain) NSMutableArray *productsSold;
+@property NSInteger companyID;
 
--(instancetype)initWithCompanyName: (NSString*) name logo: (NSString*) logo;
--(instancetype)initWithCompanyName: (NSString*)name logoURL:(NSString *)logoURL ticker: (NSString*)ticker;
+-(instancetype)initWithCompanyName:(NSString*)name
+                              logo:(NSString*)logo;
+
+-(instancetype)initWithCompanyName:(NSString*)name
+                           logoURL:(NSString *)logoURL
+                            ticker:(NSString*)ticker;
 
 -(void)addProduct:(Product*) product;
 

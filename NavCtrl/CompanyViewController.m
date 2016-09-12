@@ -7,56 +7,66 @@
 //
 
 #import "CompanyViewController.h"
-#import "ProductViewController.h"
+#import "ProductVController.h"
 #import "NavControllerAppDelegate.h"
 #import "Company.h"
 #import "Product.h"
 #import "DAO.h"
-#import "CompanyForm.h"
+#import "AddCompanyFormVC.h"
 
 @interface CompanyViewController ()
 
 @property (nonatomic, retain) DAO *dataAccessObject;
-@property (nonatomic, retain) CompanyForm *companyFormVC;
-@property (nonatomic, retain) UIStoryboard *mainStoryboard;
+@property (nonatomic, retain) AddCompanyFormVC *addCompanyFormVC;
 @end
 
 @implementation CompanyViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    
-    if (self) {
-
-    }
-    return self;
-}
 
 -(void)reloadTable {
-    [self.tableView reloadData];
+    [self.companyTableView reloadData];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationController.navigationBar setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:127.0/255.0 green:180.0/255.0 blue:57.0/255.0 alpha:0.5];
+    
+    //creating the undo and redo buttons
+    
+    
     
     
     self.editCompanyVC = [[EditCompanyVC alloc]init];
     self.dataAccessObject = [DAO sharedInstanceOfDAO];
-    self.mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    self.companyFormVC = (CompanyForm*)[self.mainStoryboard instantiateViewControllerWithIdentifier:@"CompanyFormVC"];
+    //hide or unhide
+    
+    
+    
+    
     // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
+//     self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
-    
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButton:)];
+    self.noCompaniesImageView.image = [UIImage imageNamed:@"nocompanies"];
+    self.navigationItem.leftBarButtonItem = editButton;
     self.navigationItem.rightBarButtonItem = addButton;
-    self.title = @"Watch List";
-    self.tableView.editing = NO;
-    self.tableView.allowsSelectionDuringEditing = YES;
+    
+    
+    self.navigationItem.leftBarButtonItem.tintColor=[UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    self.title = @"Stock Tracker";
+    [self.companyTableView setEditing:YES animated:YES];
+    
+    self.companyTableView.editing = NO;
+    self.companyTableView.allowsSelectionDuringEditing = YES;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadTable)
                                                  name:@"newCompanyImageDownloaded"
@@ -78,8 +88,21 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self.tableView reloadData];
-    [self loadCompaniesQuotes];
+    [self.companyTableView reloadData];
+    [self checkIfThereAreCompanies];
+    self.stockPriceReloadTimer = [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(loadCompaniesQuotes) userInfo:nil repeats:YES];
+    
+}
+
+-(void)checkIfThereAreCompanies
+{
+    if(!([self.dataAccessObject.companyList count]==0))
+    {
+        [self.noCompaniesView setHidden:YES];
+        [self loadCompaniesQuotes];
+    }else{
+        [self.noCompaniesView setHidden:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,22 +113,25 @@
 
 -(void)loadCompaniesQuotes
 {
+    
+    
+    NSLog(@"quotes reloaded");
     NSString *quoteQueryString=@"";
     for (Company *company in self.dataAccessObject.companyList){
         quoteQueryString=[NSString stringWithFormat:@"%@,%@",company.ticker,quoteQueryString];
     }
     quoteQueryString=[quoteQueryString substringToIndex:[quoteQueryString length]-1];
-    NSLog(@"%@",quoteQueryString);
+//    NSLog(@"%@",quoteQueryString);
     NSString *queryURLString=[NSString stringWithFormat:@"https://www.google.com/finance/info?q=%@",quoteQueryString];
-    NSLog(@"%@",queryURLString);
+//    NSLog(@"%@",queryURLString);
     NSURL *stockURL = [NSURL URLWithString:queryURLString];
     NSURLSessionDataTask *downloadQuotes = [[NSURLSession sharedSession]dataTaskWithURL:stockURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSString *putInString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];//puts the JSON data into a string
         NSString *newString = [putInString substringFromIndex:3];
         self.JSONData = [newString dataUsingEncoding:NSUTF8StringEncoding];
         self.stockInfoArray = [NSJSONSerialization JSONObjectWithData:self.JSONData options:NSJSONReadingMutableContainers error:nil]; //creates a dicionary with the JSON data
-        NSLog(@"%@",newString);
-        NSLog(@"%@",[[self.stockInfoArray objectAtIndex:0] valueForKey:@"l"]);
+//        NSLog(@"%@",newString);
+//        NSLog(@"%@",[[self.stockInfoArray objectAtIndex:0] valueForKey:@"l"]);
         
         for(NSDictionary *companyDic in self.stockInfoArray){
             NSString *companyTicker = [companyDic valueForKey:@"t"];
@@ -164,7 +190,7 @@
     cell.detailTextLabel.text = @"";
     
     if(company.currentStockPrice > 0.0){
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.2f",company.currentStockPrice];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.2f",company.currentStockPrice];
     }
     
     
@@ -172,69 +198,25 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-//// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-    NSString *object= [self.dataAccessObject.companyList objectAtIndex:fromIndexPath.row];
-    [self.dataAccessObject.companyList removeObject:object];
-    [self.dataAccessObject.companyList insertObject:object atIndex:toIndexPath.row];
-    /*[self.companyList exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];*/
-    
-}
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-    if(self.tableView.editing){
+    if(self.companyTableView.editing){
         
         self.editCompanyVC.editingCompany = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
         [self.navigationController
          pushViewController:self.editCompanyVC
          animated:YES];
     }else{
+        self.productViewController = [[ProductVController alloc]initWithNibName:@"ProductVController" bundle:nil];
         self.productViewController.company = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
         [self.navigationController
          pushViewController:self.productViewController
          animated:YES];
     }
-    
     
 
 }
@@ -243,19 +225,70 @@
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.dataAccessObject.companyList removeObjectAtIndex:indexPath.row];
+//    [self.dataAccessObject.companyList removeObjectAtIndex:indexPath.row];
+    DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
+    
+    [dataAccessObject deleteCompany: self.dataAccessObject.companyList[indexPath.row]];
+    
     
     [tableView reloadData];
+    [self checkIfThereAreCompanies];
+
+    
 }
 
 - (void)addItem:sender {
     
-    
-    [[self navigationController] presentViewController:self.companyFormVC animated:YES completion:nil];
+    self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
+    [self.navigationController pushViewController:self.addCompanyFormVC animated:YES];
 }
 
-//-(void)setEditing:(BOOL)editing animated:(BOOL)animated
-//{
-//    NSLog(@"editing began");
-//}
+
+- (void)dealloc {
+    [_companyTableView release];
+    [_noCompaniesImageView release];
+    [_noCompaniesView release];
+    [super dealloc];
+}
+
+- (IBAction)undoButton:(id)sender {
+    [self.dataAccessObject undoMethod];
+    [self reloadTable];
+    [self checkIfThereAreCompanies];
+}
+
+- (IBAction)redoButton:(id)sender {
+    [self.dataAccessObject redoMethod];
+    [self reloadTable];
+    [self checkIfThereAreCompanies];
+}
+
+-(void)editButton:sender
+{
+    if(!self.companyTableView.editing)
+    {
+    [self.companyTableView setEditing:YES animated:YES];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editButton:)];
+        self.navigationItem.leftBarButtonItem = doneButton;
+        
+    }else
+    {
+        [self.companyTableView setEditing:NO animated:YES];
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButton:)];
+        self.navigationItem.leftBarButtonItem = editButton;
+    }
+    
+    
+}
+- (IBAction)addCompanyButton:(id)sender {
+    self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
+    
+    [self.navigationController pushViewController:self.addCompanyFormVC animated:YES];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [self.stockPriceReloadTimer invalidate];
+}
+
 @end
