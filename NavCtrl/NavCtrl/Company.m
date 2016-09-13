@@ -28,9 +28,6 @@
             self.companyID = [defaults integerForKey:@"companyID"]+1;
             [defaults setInteger:self.companyID forKey:@"companyID"];
         }
-        
-        
-        
     }
     return self;
 }
@@ -77,13 +74,17 @@
     return self;
 }
 
-
-//-(void)addProduct: (Product*) product
-//{
-//    if(self.productsSold==nil){
-//        self.productsSold = [[NSMutableArray alloc]init];
-//    }
-//    [self.productsSold addObject:product];
-//    [self.productsSold autorelease];
-//}
+-(void)dealloc
+{
+    [_productsSold release];
+    [super dealloc];
+}
+-(void)addProduct: (Product*) product
+{
+    if(self.productsSold==nil){
+        self.productsSold = [[NSMutableArray alloc]init];
+    }
+    [self.productsSold addObject:product];
+    [self.productsSold autorelease];
+}
 @end

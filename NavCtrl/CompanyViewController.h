@@ -6,9 +6,12 @@
 //  Copyright (c) 2013 Aditya Narayan. All rights reserved.
 //
 
+
 #import <UIKit/UIKit.h>
 #import "Company.h"
 #import "EditCompanyVC.h"
+#import "QuartzCore/QuartzCore.h"
+
 @class ProductVController;
 
 @interface CompanyViewController : UIViewController < UITableViewDataSource, UITableViewDelegate >
@@ -24,5 +27,6 @@
 @property (retain, nonatomic) IBOutlet UIImageView *noCompaniesImageView;
 - (IBAction)addCompanyButton:(id)sender;
 @property (retain, nonatomic) IBOutlet UIView *noCompaniesView;
-@property NSTimer *stockPriceReloadTimer;
+@property (nonatomic, retain) NSTimer *stockPriceReloadTimer;
+@property int *firstTimeViewDidAppearCounter;
 @end

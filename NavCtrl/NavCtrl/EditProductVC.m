@@ -83,10 +83,7 @@
     [self.navigationController popViewControllerAnimated:true];
 }
 
--(void)backToProduct: sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -110,7 +107,32 @@
     [super dealloc];
 }
 
-//keyboard code
+#pragma mark --- buttons
+
+- (IBAction)deleteProduct:(id)sender {
+    
+    DAO *dataAccessObjest = [DAO sharedInstanceOfDAO];
+    [dataAccessObjest removeProductFromCompany:self.companyFrom product:self.productEditing];
+    ProductVController *PVC = [[ProductVController alloc]init];
+    PVC.company = self.companyFrom;
+    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
+}
+
+-(void)backToProduct: sender
+{
+    
+    //code to use to make custom animations when moving from view controllers
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.5;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+# pragma mark --- Hide Keyboard instructions
+
+
 -(void)keyboardWillShow {
     // Animate the current view out of the way
     if (self.view.frame.origin.y >= 0)
@@ -206,12 +228,4 @@
     
 }
 
-- (IBAction)deleteProduct:(id)sender {
-    
-    DAO *dataAccessObjest = [DAO sharedInstanceOfDAO];
-    [dataAccessObjest removeProductFromCompany:self.companyFrom product:self.productEditing];
-    ProductVController *PVC = [[ProductVController alloc]init];
-    PVC.company = self.companyFrom;
-    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
-}
 @end

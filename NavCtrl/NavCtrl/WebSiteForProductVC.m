@@ -23,6 +23,8 @@
     self.editVC.webSiteVC = self;
     UIBarButtonItem *editProduct = [[UIBarButtonItem alloc]initWithTitle:@"Edit" style:UIBarButtonItemStyleBordered target:self action:@selector(editProduct:)];
     self.navigationItem.rightBarButtonItem = editProduct;
+    
+    
     WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
     self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:theConfiguration];
     self.webView.navigationDelegate = self;
@@ -35,15 +37,7 @@
     self.navigationItem.leftBarButtonItem=btn;
 }
 
--(void)editProduct: (id)sender
-{
-    
-    
-    self.editVC.productEditing = self.productShown;
-    self.editVC.companyFrom = self.companyFrom;
-    
-    [self.navigationController pushViewController:self.editVC animated:YES];
-}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     
@@ -58,8 +52,25 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+
+# pragma mark --- buttons and transitions
+
 -(void)backToProductList: sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+-(void)editProduct: (id)sender
+{
+    
+    
+    self.editVC.productEditing = self.productShown;
+    self.editVC.companyFrom = self.companyFrom;
+    
+    [self.navigationController pushViewController:self.editVC animated:YES];
+}
+
+
 @end

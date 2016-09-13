@@ -211,12 +211,10 @@
         if([prod.company isEqual:companyMO])
         {
             Product *product = [self createProductFromMOProduct:prod];
-//            [comp addProduct:product];
-//            if(comp.productsSold==nil){
-//                comp.productsSold = [[NSMutableArray alloc]init];
-//            }
+            if(comp.productsSold==nil){
+                comp.productsSold = [[NSMutableArray alloc]init];
+            }
             [comp.productsSold addObject:product];
-            [comp.productsSold release];
         }
     }
     
@@ -385,7 +383,7 @@
             break;
         }
     }
-    [company release];
+//    [company release];
 //    [self saveContext];
 }
 

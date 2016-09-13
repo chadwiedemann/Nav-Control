@@ -54,16 +54,7 @@
 
 
 
-- (void)saveCompany:sender
-{
-    
-    self.dataAccessObject = [DAO sharedInstanceOfDAO];
-    
-    Company *newCompany = [[Company alloc]initWithCompanyName:[self.CompanyTextField text] logoURL:[self.companyLogoTextField text] ticker:self.companyTicker.text];
-    
-    [self.dataAccessObject addCompany:newCompany];
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -74,7 +65,35 @@
 }
 
 
-//move the keyboard
+
+# pragma mark --- buttons
+
+- (void)saveCompany:sender
+{
+    
+    self.dataAccessObject = [DAO sharedInstanceOfDAO];
+    
+    Company *newCompany = [[Company alloc]initWithCompanyName:[self.CompanyTextField text] logoURL:[self.companyLogoTextField text] ticker:self.companyTicker.text];
+    
+    [self.dataAccessObject addCompany:newCompany];
+    
+    //code to use to make custom animations when moving from view controllers
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.5;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionMoveIn;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+-(void)backToProduct:sender
+{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+# pragma mark --- Hide Keyboard instructions
 
 
 -(void)keyboardWillShow {
@@ -178,10 +197,6 @@
     [self.companyTicker resignFirstResponder];
 }
 
--(void)backToProduct:sender
-{
-    
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 @end
 

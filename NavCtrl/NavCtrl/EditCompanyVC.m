@@ -106,6 +106,16 @@
     [_companyLogo release];
     [super dealloc];
 }
+
+
+# pragma --- mark buttons
+
+
+-(void)backToProduct: sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)deleteCompanyButton:(id)sender {
     DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
     
@@ -113,12 +123,8 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)backToProduct: sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
+# pragma mark --- Hide Keyboard instructions
 
-//move screen when keyboard shows up...
 -(void)keyboardWillShow {
     // Animate the current view out of the way
     if (self.view.frame.origin.y >= 0)

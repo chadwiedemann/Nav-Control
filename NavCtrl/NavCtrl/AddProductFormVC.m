@@ -54,6 +54,11 @@
     [_websiteTextField release];
     [super dealloc];
 }
+
+
+
+# pragma mark --- buttons
+
 - (void)saveProduct:sender {
     
     self.dataAccessObject = [DAO sharedInstanceOfDAO];
@@ -63,6 +68,17 @@
     [self.dataAccessObject addProductToCompany:self.curentCompany product:newProduct];
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+- (void)backToProduct:sender
+{
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
+
+# pragma mark --- Hide Keyboard instructions
 
 -(void)keyboardWillShow {
     // Animate the current view out of the way
@@ -163,10 +179,5 @@
     [self.websiteTextField resignFirstResponder];
 }
 
-- (void)backToProduct:sender
-{
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-}
+
 @end

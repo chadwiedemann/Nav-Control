@@ -30,6 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self.navigationController.navigationBar setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
@@ -49,7 +50,7 @@
     
     
     // Uncomment the following line to preserve selection between presentations.
-//     self.clearsSelectionOnViewWillAppear = NO;
+    //     self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem:)];
@@ -76,7 +77,7 @@
                                              selector:@selector(reloadTable)
                                                  name:@"newTickerDownloaded"
                                                object:nil];
-
+    
     
     
     
@@ -91,6 +92,7 @@
     [self.companyTableView reloadData];
     [self checkIfThereAreCompanies];
     self.stockPriceReloadTimer = [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(loadCompaniesQuotes) userInfo:nil repeats:YES];
+    self.firstTimeViewDidAppearCounter = 1;
     
 }
 
@@ -121,29 +123,41 @@
         quoteQueryString=[NSString stringWithFormat:@"%@,%@",company.ticker,quoteQueryString];
     }
     quoteQueryString=[quoteQueryString substringToIndex:[quoteQueryString length]-1];
-//    NSLog(@"%@",quoteQueryString);
+    //    NSLog(@"%@",quoteQueryString);
     NSString *queryURLString=[NSString stringWithFormat:@"https://www.google.com/finance/info?q=%@",quoteQueryString];
-//    NSLog(@"%@",queryURLString);
+    //    NSLog(@"%@",queryURLString);
     NSURL *stockURL = [NSURL URLWithString:queryURLString];
     NSURLSessionDataTask *downloadQuotes = [[NSURLSession sharedSession]dataTaskWithURL:stockURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSString *putInString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];//puts the JSON data into a string
-        NSString *newString = [putInString substringFromIndex:3];
-        self.JSONData = [newString dataUsingEncoding:NSUTF8StringEncoding];
-        self.stockInfoArray = [NSJSONSerialization JSONObjectWithData:self.JSONData options:NSJSONReadingMutableContainers error:nil]; //creates a dicionary with the JSON data
-//        NSLog(@"%@",newString);
-//        NSLog(@"%@",[[self.stockInfoArray objectAtIndex:0] valueForKey:@"l"]);
-        
-        for(NSDictionary *companyDic in self.stockInfoArray){
-            NSString *companyTicker = [companyDic valueForKey:@"t"];
-            Company *company = [self.dataAccessObject findCompanyByTicker:companyTicker];
-            company.currentStockPrice = [companyDic[@"l_fix"] floatValue];
+        if(error){
+            
+            if(self.firstTimeViewDidAppearCounter == 1 ){
+            [self showNoInternetAlert];
+                self.firstTimeViewDidAppearCounter++;
+            }
+            DAO *dao = [DAO sharedInstanceOfDAO];
+            for(Company *c in dao.companyList){
+                c.currentStockPrice = 0.00;
+            }
+            [self.companyTableView reloadData];
+            NSLog(@"there is no internet connection");
+        }else{
+            self.firstTimeViewDidAppearCounter = 1;
+            NSString *putInString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];//puts the JSON data into a string
+            NSString *newString = [putInString substringFromIndex:3];
+            self.JSONData = [newString dataUsingEncoding:NSUTF8StringEncoding];
+            self.stockInfoArray = [NSJSONSerialization JSONObjectWithData:self.JSONData options:NSJSONReadingMutableContainers error:nil]; //creates a dicionary with the JSON data
+            
+            for(NSDictionary *companyDic in self.stockInfoArray){
+                NSString *companyTicker = [companyDic valueForKey:@"t"];
+                Company *company = [self.dataAccessObject findCompanyByTicker:companyTicker];
+                company.currentStockPrice = [companyDic[@"l_fix"] floatValue];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"newTickerDownloaded"
+                 object:nil];
+            });
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter]
-             postNotificationName:@"newTickerDownloaded"
-             object:nil];
-        });
-        
     }];
     [downloadQuotes resume];
     
@@ -153,14 +167,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
+    
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
+    
     // Return the number of rows in the section.
     
     return [self.dataAccessObject.companyList count];
@@ -168,7 +182,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell.showsReorderControl = YES;
@@ -189,8 +202,8 @@
     
     cell.detailTextLabel.text = @"";
     
-    if(company.currentStockPrice > 0.0){
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.2f",company.currentStockPrice];
+    if(company.currentStockPrice >= 0.0){
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"$%.2f",company.currentStockPrice];
     }
     
     
@@ -198,34 +211,25 @@
     return cell;
 }
 
+-(void)showNoInternetAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Conectivity Alert" message:@"Stock data unavailable please establish conection" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){}];
+    
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-    if(self.companyTableView.editing){
-        
-        self.editCompanyVC.editingCompany = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
-        [self.navigationController
-         pushViewController:self.editCompanyVC
-         animated:YES];
-    }else{
-        self.productViewController = [[ProductVController alloc]initWithNibName:@"ProductVController" bundle:nil];
-        self.productViewController.company = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
-        [self.navigationController
-         pushViewController:self.productViewController
-         animated:YES];
-    }
-    
-
-}
 
 - (void)tableView:(UITableView *)tableView
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
 forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [self.dataAccessObject.companyList removeObjectAtIndex:indexPath.row];
+    //    [self.dataAccessObject.companyList removeObjectAtIndex:indexPath.row];
     DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
     
     [dataAccessObject deleteCompany: self.dataAccessObject.companyList[indexPath.row]];
@@ -233,15 +237,10 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     
     [tableView reloadData];
     [self checkIfThereAreCompanies];
-
+    
     
 }
 
-- (void)addItem:sender {
-    
-    self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
-    [self.navigationController pushViewController:self.addCompanyFormVC animated:YES];
-}
 
 
 - (void)dealloc {
@@ -263,11 +262,26 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [self checkIfThereAreCompanies];
 }
 
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [self.stockPriceReloadTimer invalidate];
+}
+
+#pragma mark --- transitions and buttons
+
+- (IBAction)addCompanyButton:(id)sender {
+    self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
+    self.addCompanyFormVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self.navigationController pushViewController:self.addCompanyFormVC animated:YES];
+}
+
 -(void)editButton:sender
 {
     if(!self.companyTableView.editing)
     {
-    [self.companyTableView setEditing:YES animated:YES];
+        [self.companyTableView setEditing:YES animated:YES];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editButton:)];
         self.navigationItem.leftBarButtonItem = doneButton;
         
@@ -277,18 +291,34 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButton:)];
         self.navigationItem.leftBarButtonItem = editButton;
     }
-    
-    
-}
-- (IBAction)addCompanyButton:(id)sender {
-    self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
-    
-    [self.navigationController pushViewController:self.addCompanyFormVC animated:YES];
 }
 
--(void)viewDidDisappear:(BOOL)animated
-{
-    [self.stockPriceReloadTimer invalidate];
+- (void)addItem:sender {
+    
+    self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
+    
+    
+    [self.navigationController pushViewController:self.addCompanyFormVC animated:NO];
+    
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if(self.companyTableView.editing){
+        self.editCompanyVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        self.editCompanyVC.editingCompany = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
+        [self.navigationController
+         pushViewController:self.editCompanyVC
+         animated:NO];
+    }else{
+        self.productViewController = [[ProductVController alloc]initWithNibName:@"ProductVController" bundle:nil];
+        self.productViewController.company = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
+        
+        [self.navigationController pushViewController:self.productViewController animated:NO];
+    }
+    
+}
+
 
 @end

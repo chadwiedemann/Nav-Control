@@ -76,17 +76,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     return [self.company.productsSold count];
     
     
@@ -124,26 +121,12 @@
     [self.company.productsSold removeObject:productToRemove];
     
     [self.company.productsSold insertObject:productToRemove atIndex:toIndexPath.row];
-    
-    
 }
 
 
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    
-    
-    self.webSiteVC.nsurl = [NSURL URLWithString:[[self.company.productsSold objectAtIndex:indexPath.row] urlString]];
-    self.webSiteVC.productShown = [self.company.productsSold objectAtIndex:indexPath.row];
-    self.webSiteVC.companyFrom = self.company;
-    
-    
-    [self.navigationController pushViewController:self.webSiteVC animated:YES];
-    
-}
+
 
 - (void)tableView:(UITableView *)tableView
 commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
@@ -154,19 +137,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     DAO *dataAccessOject = [DAO sharedInstanceOfDAO];
     
     [dataAccessOject removeProductFromCompany:self.company product:[self.company.productsSold objectAtIndex:indexPath.row]];
-    //    [self.company.productsSold removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSMutableArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     
 }
 
-- (void)addItem:sender {
-    
-    
-    self.addProductVC = [[AddProductFormVC alloc]initWithNibName:@"AddProductFormVC" bundle:nil];
-    self.addProductVC.curentCompany = self.company;
-    [self.navigationController pushViewController:self.addProductVC animated:YES];
 
-}
 
 -(void)reloadTable {
     [self.productTableView reloadData];
@@ -180,17 +155,8 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     [super dealloc];
 }
 
--(void)backToCompany: sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-- (IBAction)addProductButton:(id)sender {
-    
-    self.addProductVC = [[AddProductFormVC alloc]initWithNibName:@"AddProductFormVC" bundle:nil];
-    self.addProductVC.curentCompany = self.company;
-    [self.navigationController pushViewController:self.addProductVC animated:YES];
-    
-}
+
+
 
 -(void)checkIfThereAreProducts
 {
@@ -201,4 +167,43 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
         [self.noProductView setHidden:NO];
     }
 }
+
+# pragma mark --- buttons and transitions
+
+- (IBAction)addProductButton:(id)sender {
+    
+    self.addProductVC = [[AddProductFormVC alloc]initWithNibName:@"AddProductFormVC" bundle:nil];
+    self.addProductVC.curentCompany = self.company;
+    
+
+    [self.navigationController pushViewController:self.addProductVC animated:YES];
+    
+}
+
+-(void)backToCompany: sender
+{
+    
+    [self.navigationController popViewControllerAnimated:NO];
+}
+
+- (void)addItem:sender {
+    
+    self.addProductVC = [[AddProductFormVC alloc]initWithNibName:@"AddProductFormVC" bundle:nil];
+    self.addProductVC.curentCompany = self.company;
+    [self.navigationController pushViewController:self.addProductVC animated:YES];
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    self.webSiteVC.nsurl = [NSURL URLWithString:[[self.company.productsSold objectAtIndex:indexPath.row] urlString]];
+    self.webSiteVC.productShown = [self.company.productsSold objectAtIndex:indexPath.row];
+    self.webSiteVC.companyFrom = self.company;
+    
+    
+    [self.navigationController pushViewController:self.webSiteVC animated:YES];
+    
+}
+
 @end

@@ -48,22 +48,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NavCtrl/EditProductVC.m"
-            timestampString = "495064601.797814"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "210"
-            endingLineNumber = "210"
-            landmarkName = "-deleteProduct:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -84,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "321"
-            endingLineNumber = "321"
+            startingLineNumber = "319"
+            endingLineNumber = "319"
             landmarkName = "-removeProductFromCompany:product:"
             landmarkType = "5">
             <Locations>
@@ -100,11 +84,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.682146"
+                  timestampString = "495406429.951253"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "322"
-                  endingLineNumber = "322"
+                  startingLineNumber = "320"
+                  endingLineNumber = "320"
                   offsetFromSymbolStart = "71">
                </Location>
                <Location
@@ -115,11 +99,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.682336"
+                  timestampString = "495406429.951436"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "322"
-                  endingLineNumber = "322"
+                  startingLineNumber = "320"
+                  endingLineNumber = "320"
                   offsetFromSymbolStart = "84">
                </Location>
             </Locations>
@@ -132,11 +116,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NavCtrl/Company.m"
-            timestampString = "494464025.420932"
+            timestampString = "495394250.775426"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
             landmarkName = "-initWithCompanyName:logoURL:ticker:"
             landmarkType = "5">
          </BreakpointContent>
@@ -163,22 +147,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NavCtrl/EditCompanyVC.m"
-            timestampString = "494982236.161099"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "-deleteCompanyButton:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "NavCtrl/ProductFormVC.m"
             timestampString = "494984837.274442"
             startingColumnNumber = "9223372036854775807"
@@ -196,11 +164,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "-addProductToCompany:product:"
             landmarkType = "5">
             <Locations>
@@ -212,11 +180,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.685569"
+                  timestampString = "495406429.95479"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "282"
-                  endingLineNumber = "282"
+                  startingLineNumber = "280"
+                  endingLineNumber = "280"
                   offsetFromSymbolStart = "71">
                </Location>
                <Location
@@ -227,11 +195,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.685713"
+                  timestampString = "495406429.95494"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "282"
-                  endingLineNumber = "282"
+                  startingLineNumber = "280"
+                  endingLineNumber = "280"
                   offsetFromSymbolStart = "84">
                </Location>
             </Locations>
@@ -244,11 +212,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "308"
-            endingLineNumber = "308"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
             landmarkName = "-findCompanyMOforAddingProduct:"
             landmarkType = "5">
             <Locations>
@@ -260,11 +228,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.686588"
+                  timestampString = "495406429.955826"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "308"
-                  endingLineNumber = "308"
+                  startingLineNumber = "306"
+                  endingLineNumber = "306"
                   offsetFromSymbolStart = "63">
                </Location>
                <Location
@@ -275,11 +243,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.686727"
+                  timestampString = "495406429.955939"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "308"
-                  endingLineNumber = "308"
+                  startingLineNumber = "306"
+                  endingLineNumber = "306"
                   offsetFromSymbolStart = "76">
                </Location>
             </Locations>
@@ -308,11 +276,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "394"
-            endingLineNumber = "394"
+            startingLineNumber = "392"
+            endingLineNumber = "392"
             landmarkName = "-editCompanyInfo:name:ticker:logoURL:"
             landmarkType = "5">
             <Locations>
@@ -324,11 +292,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.688106"
+                  timestampString = "495406429.957332"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "394"
-                  endingLineNumber = "394"
+                  startingLineNumber = "392"
+                  endingLineNumber = "392"
                   offsetFromSymbolStart = "88">
                </Location>
                <Location
@@ -339,11 +307,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.688217"
+                  timestampString = "495406429.957523"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "394"
-                  endingLineNumber = "394"
+                  startingLineNumber = "392"
+                  endingLineNumber = "392"
                   offsetFromSymbolStart = "101">
                </Location>
             </Locations>
@@ -372,11 +340,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "416"
-            endingLineNumber = "416"
+            startingLineNumber = "414"
+            endingLineNumber = "414"
             landmarkName = "-editProductInfo:productURL:productImageURL:productEditing:companyFrom:"
             landmarkType = "5">
             <Locations>
@@ -388,11 +356,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.689579"
+                  timestampString = "495406429.958912"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "416"
-                  endingLineNumber = "416"
+                  startingLineNumber = "414"
+                  endingLineNumber = "414"
                   offsetFromSymbolStart = "102">
                </Location>
                <Location
@@ -403,11 +371,11 @@
                   moduleName = "NavCtrl"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/chadwiedemann/Desktop/TurnToTech%20info/Nav%20Control/NavCtrl/DAO.m"
-                  timestampString = "495390023.689693"
+                  timestampString = "495406429.959018"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "416"
-                  endingLineNumber = "416"
+                  startingLineNumber = "414"
+                  endingLineNumber = "414"
                   offsetFromSymbolStart = "116">
                </Location>
             </Locations>
@@ -420,11 +388,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "255"
-            endingLineNumber = "255"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "-addCompany:"
             landmarkType = "5">
          </BreakpointContent>
@@ -499,60 +467,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NavCtrl/AddCompanyFormVC.m"
-            timestampString = "495051825.669876"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
-            landmarkName = "-saveCompany:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NavCtrl/AddCompanyFormVC.m"
-            timestampString = "495052463.021534"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
-            landmarkName = "-backToProduct:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CompanyViewController.m"
-            timestampString = "495390640.425961"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
-            landmarkName = "-tableView:commitEditingStyle:forRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
+            startingLineNumber = "364"
+            endingLineNumber = "364"
             landmarkName = "-deleteCompany:"
             landmarkType = "5">
          </BreakpointContent>
@@ -564,11 +484,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "463"
-            endingLineNumber = "463"
+            startingLineNumber = "461"
+            endingLineNumber = "461"
             landmarkName = "-reloadDataFromContext"
             landmarkType = "5">
          </BreakpointContent>
@@ -580,12 +500,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DAO.m"
-            timestampString = "495388318.950988"
+            timestampString = "495393952.468751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "488"
-            endingLineNumber = "488"
+            startingLineNumber = "486"
+            endingLineNumber = "486"
             landmarkName = "-reloadDataFromContext"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CompanyViewController.m"
+            timestampString = "495470939.307552"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "-loadCompaniesQuotes"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
