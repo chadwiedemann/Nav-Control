@@ -38,6 +38,32 @@
     
 }
 
+
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    
+    self.nameTextField.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.name];
+    
+    self.productURL.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.urlString];
+    self.productImageURL.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.imageURL];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+- (void)dealloc {
+    [_productURL release];
+    [_productImageURL release];
+    [_nameTextField release];
+    [super dealloc];
+}
+
+#pragma mark --- buttons
+
 -(void)saveItem:sender
 {
     DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
@@ -80,34 +106,17 @@
     
     self.webSiteVC.nsurl = [NSURL URLWithString:self.productEditing.urlString];
     self.webSiteVC.productShown = self.productEditing;
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"genieEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController popViewControllerAnimated:true];
 }
 
 
-
--(void)viewDidAppear:(BOOL)animated
-{
-    
-    self.nameTextField.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.name];
-    
-    self.productURL.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.urlString];
-    self.productImageURL.placeholder = [NSString stringWithFormat:@"%@",self.productEditing.imageURL];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-- (void)dealloc {
-    [_productURL release];
-    [_productImageURL release];
-    [_nameTextField release];
-    [super dealloc];
-}
-
-#pragma mark --- buttons
 
 - (IBAction)deleteProduct:(id)sender {
     
@@ -115,18 +124,26 @@
     [dataAccessObjest removeProductFromCompany:self.companyFrom product:self.productEditing];
     ProductVController *PVC = [[ProductVController alloc]init];
     PVC.company = self.companyFrom;
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"genieEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
 }
 
 -(void)backToProduct: sender
 {
     
-    //code to use to make custom animations when moving from view controllers
+    
     CATransition* transition = [CATransition animation];
-    transition.duration = 0.5;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionPush;
+    transition.duration = .5;
+    transition.type = @"genieEffect";
+    transition.subtype = kCATransitionFromTop;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

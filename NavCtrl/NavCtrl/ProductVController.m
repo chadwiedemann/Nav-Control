@@ -175,6 +175,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     self.addProductVC = [[AddProductFormVC alloc]initWithNibName:@"AddProductFormVC" bundle:nil];
     self.addProductVC.curentCompany = self.company;
     
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"pageCurl";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
 
     [self.navigationController pushViewController:self.addProductVC animated:YES];
     
@@ -183,13 +188,26 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 -(void)backToCompany: sender
 {
     
-    [self.navigationController popViewControllerAnimated:NO];
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"oglFlip";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)addItem:sender {
     
     self.addProductVC = [[AddProductFormVC alloc]initWithNibName:@"AddProductFormVC" bundle:nil];
     self.addProductVC.curentCompany = self.company;
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"pageCurl";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController pushViewController:self.addProductVC animated:YES];
     
 }
@@ -201,7 +219,11 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
     self.webSiteVC.productShown = [self.company.productsSold objectAtIndex:indexPath.row];
     self.webSiteVC.companyFrom = self.company;
     
-    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"suckEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
     [self.navigationController pushViewController:self.webSiteVC animated:YES];
     
 }

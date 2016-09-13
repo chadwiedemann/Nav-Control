@@ -163,7 +163,25 @@
     
 }
 
+
+
 #pragma mark - Table view data source
+
+-(void)editButton:sender
+{
+    if(!self.companyTableView.editing)
+    {
+        [self.companyTableView setEditing:YES animated:YES];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editButton:)];
+        self.navigationItem.leftBarButtonItem = doneButton;
+        
+    }else
+    {
+        [self.companyTableView setEditing:NO animated:YES];
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButton:)];
+        self.navigationItem.leftBarButtonItem = editButton;
+    }
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -273,30 +291,27 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (IBAction)addCompanyButton:(id)sender {
     self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
-    self.addCompanyFormVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"rippleEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
     [self.navigationController pushViewController:self.addCompanyFormVC animated:YES];
 }
 
--(void)editButton:sender
-{
-    if(!self.companyTableView.editing)
-    {
-        [self.companyTableView setEditing:YES animated:YES];
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editButton:)];
-        self.navigationItem.leftBarButtonItem = doneButton;
-        
-    }else
-    {
-        [self.companyTableView setEditing:NO animated:YES];
-        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editButton:)];
-        self.navigationItem.leftBarButtonItem = editButton;
-    }
-}
+
 
 - (void)addItem:sender {
     
     self.addCompanyFormVC = [[AddCompanyFormVC alloc]initWithNibName:@"AddCompanyFormVC" bundle:nil];
     
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"rippleEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
     
     [self.navigationController pushViewController:self.addCompanyFormVC animated:NO];
     
@@ -306,16 +321,28 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     if(self.companyTableView.editing){
-        self.editCompanyVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         self.editCompanyVC.editingCompany = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
+        
+        CATransition* transition = [CATransition animation];
+        transition.duration = .5;
+        transition.type = @"rippleEffect";
+        transition.subtype = kCATransitionFromTop;
+        [self.navigationController.view.layer addAnimation:transition forKey:nil];
+        
         [self.navigationController
          pushViewController:self.editCompanyVC
-         animated:NO];
+         animated:YES];
     }else{
         self.productViewController = [[ProductVController alloc]initWithNibName:@"ProductVController" bundle:nil];
         self.productViewController.company = [self.dataAccessObject.companyList objectAtIndex:indexPath.row];
         
-        [self.navigationController pushViewController:self.productViewController animated:NO];
+        CATransition* transition = [CATransition animation];
+        transition.duration = .5;
+        transition.type = @"oglFlip";
+        transition.subtype = kCATransitionFromTop;
+        [self.navigationController.view.layer addAnimation:transition forKey:nil];
+        
+        [self.navigationController pushViewController:self.productViewController animated:YES];
     }
     
 }

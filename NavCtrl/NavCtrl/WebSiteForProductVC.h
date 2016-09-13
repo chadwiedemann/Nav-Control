@@ -5,7 +5,7 @@
 //  Created by Chad Wiedemann on 8/11/16.
 //  Copyright © 2016 Aditya Narayan. All rights reserved.
 //
-
+#import "QuartzCore/QuartzCore.h"
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 #import "Product.h"

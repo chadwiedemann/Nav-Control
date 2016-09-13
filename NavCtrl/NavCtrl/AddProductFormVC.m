@@ -66,12 +66,29 @@
     Product *newProduct = [[Product alloc]initWithProductName:self.productTextField.text url:self.websiteTextField.text imageURL:self.logoImageTextField.text company:self.curentCompany.companyID];
     
     [self.dataAccessObject addProductToCompany:self.curentCompany product:newProduct];
+    
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"pageCurl";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+
+        
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 
 - (void)backToProduct:sender
 {
+    
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"pageCurl";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+
     
     [self.navigationController popViewControllerAnimated:YES];
     

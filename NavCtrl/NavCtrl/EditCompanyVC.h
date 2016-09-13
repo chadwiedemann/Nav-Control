@@ -6,6 +6,7 @@
 //  Copyright © 2016 Aditya Narayan. All rights reserved.
 //
 
+#import "QuartzCore/QuartzCore.h"
 #import <UIKit/UIKit.h>
 #import "Company.h"
 

@@ -59,6 +59,12 @@
 
 -(void)backToProductList: sender
 {
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"suckEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -68,6 +74,12 @@
     
     self.editVC.productEditing = self.productShown;
     self.editVC.companyFrom = self.companyFrom;
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"genieEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
     
     [self.navigationController pushViewController:self.editVC animated:YES];
 }

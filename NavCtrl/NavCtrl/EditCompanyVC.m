@@ -45,44 +45,6 @@
 
 
 
--(void)saveCompany:sender
-{
-    DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
-    [dataAccessObject editCompanyInfo:self.editingCompany name:self.companyName.text ticker:self.companyTicker.text logoURL:self.companyLogo.text];
-    
-    if(![self.companyTicker.text isEqual:@""]){
-        NSString *uppercaseTicker = [self.companyTicker.text uppercaseString];
-        self.editingCompany.ticker = uppercaseTicker;
-    }
-    if(![self.companyName.text isEqual:@""]){
-        self.editingCompany.name = self.companyName.text;
-    }
-    if (![self.companyLogo.text isEqual:@""]) {
-         self.editingCompany.logoURL = self.companyLogo.text;
-        self.editingCompany.logoString = nil;
-        NSURL *url = [NSURL URLWithString:self.companyLogo.text];
-        NSURLSessionDownloadTask *downloadLogoTask = [[NSURLSession sharedSession]downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error){
-            UIImage *downloadedLogo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
-            if(downloadedLogo != nil)
-            {
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                NSString *documentsDirectory = [paths objectAtIndex:0];
-                NSString * filename = [NSString stringWithFormat:@"%@.jpg", self.editingCompany.name];
-                NSString *path = [documentsDirectory stringByAppendingPathComponent:filename];
-                self.editingCompany.logoURL = path;
-                NSData *data = UIImagePNGRepresentation(downloadedLogo);
-                [data writeToFile:path atomically:YES];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter]
-                 postNotificationName:@"newCompanyImageDownloaded"
-                 object:nil];
-            });
-        }];
-        [downloadLogoTask resume];
-    }
-    [self.navigationController popViewControllerAnimated:YES];
-}
 -(void)viewDidAppear:(BOOL)animated
 {
     
@@ -110,9 +72,62 @@
 
 # pragma --- mark buttons
 
+-(void)saveCompany:sender
+{
+    DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
+    [dataAccessObject editCompanyInfo:self.editingCompany name:self.companyName.text ticker:self.companyTicker.text logoURL:self.companyLogo.text];
+    
+    if(![self.companyTicker.text isEqual:@""]){
+        NSString *uppercaseTicker = [self.companyTicker.text uppercaseString];
+        self.editingCompany.ticker = uppercaseTicker;
+    }
+    if(![self.companyName.text isEqual:@""]){
+        self.editingCompany.name = self.companyName.text;
+    }
+    if (![self.companyLogo.text isEqual:@""]) {
+        self.editingCompany.logoURL = self.companyLogo.text;
+        self.editingCompany.logoString = nil;
+        NSURL *url = [NSURL URLWithString:self.companyLogo.text];
+        NSURLSessionDownloadTask *downloadLogoTask = [[NSURLSession sharedSession]downloadTaskWithURL:url completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error){
+            UIImage *downloadedLogo = [UIImage imageWithData:[NSData dataWithContentsOfURL:location]];
+            if(downloadedLogo != nil)
+            {
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsDirectory = [paths objectAtIndex:0];
+                NSString * filename = [NSString stringWithFormat:@"%@.jpg", self.editingCompany.name];
+                NSString *path = [documentsDirectory stringByAppendingPathComponent:filename];
+                self.editingCompany.logoURL = path;
+                NSData *data = UIImagePNGRepresentation(downloadedLogo);
+                [data writeToFile:path atomically:YES];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter]
+                 postNotificationName:@"newCompanyImageDownloaded"
+                 object:nil];
+            });
+        }];
+        [downloadLogoTask resume];
+    }
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"rippleEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
 
 -(void)backToProduct: sender
 {
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"rippleEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -120,6 +135,14 @@
     DAO *dataAccessObject = [DAO sharedInstanceOfDAO];
     
     [dataAccessObject deleteCompany:self.editingCompany];
+    
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"rippleEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -77,18 +77,24 @@
     
     [self.dataAccessObject addCompany:newCompany];
     
-    //code to use to make custom animations when moving from view controllers
+    
     CATransition* transition = [CATransition animation];
-    transition.duration = 0.5;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionMoveIn;
+    transition.duration = .5;
+    transition.type = @"rippleEffect";
+    transition.subtype = kCATransitionFromTop;
     [self.navigationController.view.layer addAnimation:transition forKey:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 
 -(void)backToProduct:sender
 {
+    CATransition* transition = [CATransition animation];
+    transition.duration = .5;
+    transition.type = @"rippleEffect";
+    transition.subtype = kCATransitionFromTop;
+    [self.navigationController.view.layer addAnimation:transition forKey:nil];
     
     [self.navigationController popViewControllerAnimated:YES];
 }
