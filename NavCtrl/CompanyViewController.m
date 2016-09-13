@@ -144,6 +144,7 @@
             self.firstTimeViewDidAppearCounter = 1;
             NSString *putInString = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];//puts the JSON data into a string
             NSString *newString = [putInString substringFromIndex:3];
+            [putInString release];
             self.JSONData = [newString dataUsingEncoding:NSUTF8StringEncoding];
             self.stockInfoArray = [NSJSONSerialization JSONObjectWithData:self.JSONData options:NSJSONReadingMutableContainers error:nil]; //creates a dicionary with the JSON data
             

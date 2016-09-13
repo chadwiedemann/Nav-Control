@@ -34,20 +34,12 @@
         [fetchRequest setEntity:entity];
         NSError *error = nil;
         NSArray *fetchedCompanies = [[self managedObjectContext] executeFetchRequest:fetchRequest error:&error];
-        
- 
-        
-        
-        
         if (fetchedCompanies == nil) {
             NSLog(@"%@",error.localizedDescription);
         }
         self.companyMO = [fetchedCompanies mutableCopy];
         
-       
-        
-      
-        
+
         //fetch products
         NSFetchRequest *fetchedProducts = [[NSFetchRequest alloc] init];
         NSSortDescriptor *sortByCreationDateProducts = [[NSSortDescriptor alloc]
@@ -62,24 +54,11 @@
         }
         self.productMO = [fetchedObjectsProducts mutableCopy];
         self.managedObjectContext.undoManager = [[NSUndoManager alloc]init];
-        
-        
-        
         [sortByCreationDate release];
         [sortByCreationDateProducts release];
-        //[sortByCreationDateProducts dealloc];
-        //[sortByCreationDate dealloc];
         [fetchRequest release];
         [fetchedProducts release];
         
-        
-      
-     //   return self;
-        
-        
-        
-        
-
         //creating hardcoded data
         if(fetchedCompanies.count == 0){
             NSLog(@"empty database");
@@ -142,6 +121,7 @@
             [self.companyMO addObject:twitterMO];
             [self saveContext];
             
+            
         }else
         {
             NSLog(@"we have data");
@@ -150,11 +130,7 @@
                 [self createCompanyFromMO:comp products:self.productMO];
             }
         }
-        
-        
     }
-    
-        
     return self;
 }
 
@@ -167,14 +143,15 @@
 }
 
 
--(void)createCompanyFromMO:(CompanyMO*)companyMO
-{
-    Company *comp = [[Company alloc]initWithCompanyName:companyMO.name logo:companyMO.logoString];
-    comp.ticker = companyMO.ticker;
-    comp.logoURL = companyMO.logoURL;
-    comp.companyID = companyMO.companyID;
-    [self.companyList addObject:comp];
-}
+//-(void)createCompanyFromMO:(CompanyMO*)companyMO
+//{
+//    Company *comp = [[Company alloc]initWithCompanyName:companyMO.name logo:companyMO.logoString];
+//    comp.ticker = companyMO.ticker;
+//    comp.logoURL = companyMO.logoURL;
+//    comp.companyID = companyMO.companyID;
+//    [self.companyList addObject:comp];
+//    [comp release];
+//}
 
 -(void)createCompanyFromMO:(CompanyMO*)companyMO products:(NSArray*)products
 {
@@ -211,26 +188,28 @@
         if([prod.company isEqual:companyMO])
         {
             Product *product = [self createProductFromMOProduct:prod];
-            if(comp.productsSold==nil){
-                comp.productsSold = [[NSMutableArray alloc]init];
-            }
             [comp.productsSold addObject:product];
+            [product release];
         }
+        
     }
     
-    
-    
+
     [self.companyList addObject:comp];
-    
+    [comp.productsSold release];
+    comp = nil;
 }
+
+
 
 -(Product*)createProductFromMOProduct: (ProductMO*)productMO
 {
     Product *product = [[Product alloc]initWithProductName:productMO.name url:productMO.urlString imageURL:productMO.imageURL company:[NSNumber numberWithInteger:productMO.companyID]];
     product.imageString=productMO.imageString;
     product.productID = [productMO.productID integerValue];
-//    [product autorelease];
     return product;
+    [product release];
+
 }
 
 + (DAO*)sharedInstanceOfDAO
@@ -383,8 +362,9 @@
             break;
         }
     }
-//    [company release];
-//    [self saveContext];
+    [company release];
+    
+
 }
 
 -(void)editCompanyInfo:(Company*)company name:(NSString*)name ticker:(NSString*)ticker logoURL:(NSString*)logoURL
@@ -458,61 +438,44 @@
 -(void) reloadDataFromContext
 {
    
-    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+
     
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
     NSSortDescriptor *sortByCreationDate = [[NSSortDescriptor alloc]
                                     initWithKey:@"companyID" ascending:YES];
-    
     [request setSortDescriptors:[NSArray arrayWithObject:sortByCreationDate]];
-    
     NSEntityDescription *e = [[[self managedObjectModel] entitiesByName] objectForKey:@"CompanyMO"];
     [request setEntity:e];
     NSError *error = nil;
-    
-    
-    //This gets data only from context, not from store
     NSArray *result = [[self managedObjectContext] executeFetchRequest:request error:&error];
-    
-    if(!result)
+    if(result == nil)
     {
         [NSException raise:@"Fetch Failed" format:@"Reason: %@", [error localizedDescription]];
     }
-    [sortByCreationDate release];
-    [sortByCreationDate dealloc];
- 
-    
     [self.companyMO setArray:result];
-
-    
-    
     //releasing unused objects products and companies
     for(int i = 0;i<[self.companyList count];i++)
     {
-        
+        [self.companyList[i].productsSold removeAllObjects];
         for(Product *p in self.companyList[i].productsSold){
-            [p autorelease];
-            [p autorelease];
-            
+            [p release];
+            [p release];
+
         }
-//        [self.companyList[i].productsSold release];
-//        self.companyList[i].productsSold = nil;
-//        [self.companyList[i].productsSold dealloc];
-        
-//        [self.companyList[i].productsSold autorelease];
-//        [self.companyList[i].productsSold removeAllObjects];
-        [self.companyList[i] autorelease];
+        [self.companyList[i] release];
     }
     
     [self.companyList removeAllObjects];
     
-    
-    
-    
+
     
     for(CompanyMO *comp in self.companyMO)
     {
         [self createCompanyFromMO:comp products:self.productMO];
     }
+    [sortByCreationDate release];
+    [request release];
+    
     
 }
 

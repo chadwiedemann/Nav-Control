@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+
 @interface Product : NSObject
 
 @property (nonatomic, retain) NSString *name;

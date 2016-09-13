@@ -77,6 +77,8 @@
 -(void)dealloc
 {
     [_productsSold release];
+//    _productsSold = nil;
+
     [super dealloc];
 }
 -(void)addProduct: (Product*) product
